@@ -33,7 +33,7 @@ const Navbar = () => {
           <Wrapper>
             <NavLogo to="/">
               <svg
-                fill="#7d41e1"
+                fill="#6C62E2"
                 x="0px"
                 y="0px"
                 width="40px"

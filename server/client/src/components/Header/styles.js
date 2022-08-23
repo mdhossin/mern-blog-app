@@ -29,10 +29,8 @@ export const NavMain = styled.div`
       right: -100%;
       background-color: ${({ theme }) => theme.mobile_background};
       height: 100vh;
-      width: 470px;
+      width: 450px;
       z-index: 1000;
-      // -webkit-box-shadow: $box-shadow;
-      // box-shadow: $box-shadow;
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -107,7 +105,7 @@ export const Input = styled.input`
   width: 100%;
   outline: none;
   border: none;
-  border: 1px solid #8d4ef5;
+  border: 1px solid #6c62e2;
   padding: 0 15px 0 40px;
   color: #444;
   font-size: 15px;
@@ -215,7 +213,7 @@ export const NavLinks = styled(Link)`
   transition: all 0.5s ease;
 
   &:hover {
-    color: #b589fc;
+    color: #6c62e2;
   }
 `;
 
@@ -242,27 +240,20 @@ export const ThemeWrapper = styled.div`
 
 export const Backdrop = styled.div`
   .backdrop {
-    height: 100%;
-    left: 0;
     position: fixed;
+    left: 0;
     top: 0;
+    height: 100%;
     width: 100%;
-    z-index: 999;
-
     background: rgba(0, 0, 0, 0.2);
     z-index: 1;
     visibility: hidden;
-
     opacity: 0;
-    /* visibility: visible;
-
-    opacity: 1; */
     transition: 0.5s;
   }
 
   .backdrop-open {
     visibility: visible;
-
     opacity: 1;
   }
 `;

@@ -55,6 +55,7 @@ a{
 button{
   border: none;
   outline: none;
+  background:none ;
 }
 
 

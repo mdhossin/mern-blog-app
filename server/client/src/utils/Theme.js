@@ -14,11 +14,12 @@ export const darkTheme = {
   color_gray_300: "rgba(242, 242, 254, 0.3)",
   color_gray_200: "rgba(242, 242, 254, 0.7)",
   color_white: "#ffffff",
+  theme_color: "#6C62E2",
 };
 export const lightTheme = {
   background: "rgba(255, 255, 255, 0.25)",
   mobile_background: "#ffffff",
   card_color: "rgb(241, 240, 240)",
   color_primary_light: "#304a58",
-  color_white: "#7d41e1",
+  color_white: "#444",
 };
