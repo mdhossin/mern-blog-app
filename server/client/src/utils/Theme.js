@@ -1,5 +1,5 @@
 export const darkTheme = {
-  background: "#0f0f3e",
+  background: "rgb(16,24,38)",
   main_bg: "rgb(10,15,25)",
   mobile_background: "#0f0f3e",
   card_color: "rgb(16,24,38)",

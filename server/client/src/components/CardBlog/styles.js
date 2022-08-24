@@ -29,7 +29,6 @@ export const TopContent = styled.div`
 export const WritenBy = styled.h4`
   font-size: 12px;
   font-weight: 500;
-
   font-style: italic;
 `;
 
@@ -41,6 +40,12 @@ export const Heading = styled.h2`
   margin-bottom: 0.7rem;
   font-size: 1.5rem;
   line-height: 1.3;
+  transition: all 0.4s ease;
+
+  &:hover {
+    color: #6c62e2;
+    cursor: pointer;
+  }
 `;
 export const Description = styled.p`
   font-size: 1rem;

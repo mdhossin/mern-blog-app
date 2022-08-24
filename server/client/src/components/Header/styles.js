@@ -7,7 +7,7 @@ export const Nav = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 9;
   transition: 0.4s; /*For animation dark mode*/
   box-shadow: 0 1px 4px hsla(0, 4%, 15%, 0.1);
 `;
@@ -21,8 +21,6 @@ export const NavMain = styled.div`
 
   .mobile-menu {
     @media (max-width: 1023px) {
-      /* background: url("../../assets/bgWhite.png"); */
-
       visibility: hidden;
       position: fixed;
       top: 0;
@@ -30,7 +28,7 @@ export const NavMain = styled.div`
       background-color: ${({ theme }) => theme.mobile_background};
       height: 100vh;
       width: 450px;
-      z-index: 1000;
+      z-index: 10;
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -209,8 +207,8 @@ export const NavLinks = styled(Link)`
   font-size: 16px;
   letter-spacing: 0.5px;
   color: ${({ theme }) => theme.color_white};
-  padding: 6px 0;
-  transition: all 0.5s ease;
+  padding: 16px 6px;
+  transition: all 0.4s ease;
 
   &:hover {
     color: #6c62e2;
@@ -246,7 +244,7 @@ export const Backdrop = styled.div`
     height: 100%;
     width: 100%;
     background: rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 2;
     visibility: hidden;
     opacity: 0;
     transition: 0.5s;

@@ -24,7 +24,9 @@ const CardBlog = () => {
           <WritenBy>By: Jhon doe</WritenBy>
           <Publised> 11/22/22, 12:12:18 PM</Publised>
         </TopContent>
-        <Heading>What is redux?</Heading>
+        <Link to="blogs/sddf">
+          <Heading>What is redux?</Heading>
+        </Link>
         <Description>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero,
           repellat?

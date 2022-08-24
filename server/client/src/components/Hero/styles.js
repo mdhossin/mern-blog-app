@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   padding-right: 1.5rem;
 
   .content {
-    z-index: 2;
+    z-index: 1;
     color: #fff;
     text-align: center;
     text-transform: uppercase;
