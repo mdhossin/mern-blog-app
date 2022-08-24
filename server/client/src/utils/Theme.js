@@ -1,20 +1,13 @@
 export const darkTheme = {
   background: "#0f0f3e",
+  main_bg: "rgb(10,15,25)",
   mobile_background: "#0f0f3e",
-  card_color: "#12131d",
-  color_primary: "#6f6af8",
-  color_primary_light: "hsl(242, 91%, 69%, 18%)",
-  color_primary_variant: "#5854c7",
-  color_red: "#da0f3f",
-  color_red_light: "hsl(346, 87%, 46%, 15%)",
-  color_green: "#00c476",
-  color_green_light: "hsl(156, 100%, 38%, 15%)",
-  color_gray_900: "#1e1e66",
-  color_gray_700: "#2d2b7c",
-  color_gray_300: "rgba(242, 242, 254, 0.3)",
-  color_gray_200: "rgba(242, 242, 254, 0.7)",
+  card_color: "rgb(16,24,38)",
+
   color_white: "#ffffff",
   theme_color: "#6C62E2",
+  heading_color: "#ffffff",
+  border_color: "rgba(255, 255, 255, 0.2)",
 };
 export const lightTheme = {
   background: "rgba(255, 255, 255, 0.25)",
@@ -22,4 +15,7 @@ export const lightTheme = {
   card_color: "rgb(241, 240, 240)",
   color_primary_light: "#304a58",
   color_white: "#444",
+  main_bg: "rgb(243,241,254)",
+  heading_color: "#6C62E2",
+  border_color: "hsla(0, 4%, 15%, 0.1)",
 };

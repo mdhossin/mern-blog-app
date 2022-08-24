@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
    overflow-x: hidden;
    letter-spacing:.5px ;
    font-family: 'Roboto', sans-serif;
+   background: ${({ theme }) => theme.main_bg};
    
   }
 
@@ -25,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 body::-webkit-scrollbar-track {
-  background: #212121;        /* color of the tracking area */
+  background: #6c62e2;        /* color of the tracking area */
 }
 
 body::-webkit-scrollbar-thumb {

@@ -18,14 +18,10 @@ const Hero = () => {
     >
       <Div />
 
-      <motion.div
-        className="content"
-        whileInView={{ opacity: [0, 1] }}
-        transition={{ duration: 0.5, delayChildren: 0.5 }}
-      >
+      <motion.div className="content">
         <motion.div
-          whileInView={{ scale: [0, 1] }}
-          transition={{ duration: 1.1, ease: "easeIn" }}
+          whileInView={{ opacity: [0, 1] }}
+          transition={{ duration: 0.5 }}
         >
           <Title>Learn to Code</Title>
           <SubTitle>
