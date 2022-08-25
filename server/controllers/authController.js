@@ -1,7 +1,11 @@
 const CustomErrorHandler = require("../services/CustomErrorHandler");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
-const { generateActiveToken } = require("../config/generateToken");
+const {
+  generateActiveToken,
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../config/generateToken");
 const { OAuth2Client } = require("google-auth-library");
 const { validateEmail, validPhone } = require("../utils/validation");
 const sendEmail = require("../config/sendMail");
@@ -103,16 +107,55 @@ const authController = {
     try {
       const { account, password } = req.body;
 
+      if (!account || !password) {
+        return next(
+          CustomErrorHandler.badRequest(
+            "Please enter your email or password or phone."
+          )
+        );
+      }
+
       const user = await User.findOne({ account });
       if (!user)
-        return res.status(400).json({ msg: "This account does not exits." });
+        return next(
+          CustomErrorHandler.badRequest("This account does not exits.")
+        );
 
       // if user exists
-      loginUser(user, password, res);
+      loginUser(user, password, res, next);
     } catch (err) {
       return next(err);
     }
   },
+};
+
+const loginUser = async (user, password, res, next) => {
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    let errorMessage =
+      user.type === "register"
+        ? "Password is incorrect."
+        : `Password is incorrect. This account login with ${user.type}`;
+
+    return next(CustomErrorHandler.badRequest(errorMessage));
+  }
+
+  const access_token = generateAccessToken({ id: user._id });
+  const refresh_token = generateRefreshToken({ id: user._id }, res);
+
+  await User.findOneAndUpdate(
+    { _id: user._id },
+    {
+      rf_token: refresh_token,
+    }
+  );
+
+  res.json({
+    message: "Login Success!",
+    access_token,
+    user: { ...user._doc, password: "" },
+  });
 };
 
 module.exports = authController;
