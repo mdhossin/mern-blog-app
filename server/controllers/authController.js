@@ -127,6 +127,67 @@ const authController = {
       return next(err);
     }
   },
+
+  async logout(req, res, next) {
+    if (!req.user)
+      return next(CustomErrorHandler.badRequest("Invalid Authentication."));
+
+    try {
+      res.clearCookie("refreshtoken", { path: `/api/refresh_token` });
+
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          rf_token: "",
+        }
+      );
+
+      return res.json({ message: "Logged out!" });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async refreshToken(req, res, next) {
+    try {
+      const rf_token = req.cookies.refreshtoken;
+
+      if (!rf_token)
+        return next(CustomErrorHandler.badRequest("Please login now!"));
+
+      const decoded = jwt.verify(
+        rf_token,
+        `${process.env.REFRESH_TOKEN_SECRET}`
+      );
+      if (!decoded.id)
+        return next(CustomErrorHandler.badRequest("Please login now!"));
+
+      const user = await User.findById(decoded.id).select(
+        "-password +rf_token"
+      );
+      if (!user)
+        return next(
+          CustomErrorHandler.badRequest("This email does not exist.")
+        );
+
+      if (rf_token !== user.rf_token)
+        return next(CustomErrorHandler.badRequest("Please login now!"));
+
+      const access_token = generateAccessToken({ id: user._id });
+      const refresh_token = generateRefreshToken({ id: user._id }, res);
+
+      await User.findOneAndUpdate(
+        { _id: user._id },
+        {
+          rf_token: refresh_token,
+        }
+      );
+
+      res.json({ access_token, user });
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 const loginUser = async (user, password, res, next) => {
