@@ -1,7 +1,4 @@
-const Joi = require("joi");
 const CustomErrorHandler = require("../services/CustomErrorHandler");
-
-const { ValidationError } = Joi;
 
 // error handeling middleware
 const errorHandler = (err, req, res, next) => {
@@ -15,14 +12,6 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.code === 11000) {
     statusCode = 400;
-    data = {
-      message: err.message,
-    };
-  }
-  // from joi
-  if (err instanceof ValidationError) {
-    // 422 mean validation error code
-    statusCode = 422;
     data = {
       message: err.message,
     };

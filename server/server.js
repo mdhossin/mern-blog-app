@@ -4,8 +4,13 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const errorHandler = require("./middlewares/errorHandler");
+const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
+
+// Database connection
+connectDB();
 
 // middleware
 app.use(express.json());
@@ -14,6 +19,10 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+// routes
+app.use("/api", authRoutes);
+
+// error handler middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

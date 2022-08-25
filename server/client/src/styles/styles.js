@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
   *,
 *::after,
 *::before {
@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
    
    overflow-x: hidden;
    letter-spacing:.5px ;
-   font-family: 'Roboto', sans-serif;
+   font-family: 'Inter', sans-serif;
    background: ${({ theme }) => theme.main_bg};
    
   }
