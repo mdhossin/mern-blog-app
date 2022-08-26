@@ -1,1 +1,1 @@
-# whatsapp-clone
+# MERN Blog App
