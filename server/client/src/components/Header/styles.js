@@ -71,55 +71,6 @@ export const NavLogo = styled(Link)`
   flex-grow: 1;
 `;
 
-export const InputWrapper = styled.div`
-  position: relative;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1.3;
-  @media (max-width: 768px) {
-    flex-grow: 2;
-  }
-  @media (max-width: 576px) {
-    display: none;
-  }
-  svg {
-    position: absolute;
-    z-index: 100;
-    color: #333;
-    top: 50%;
-    left: 3%;
-
-    font-size: 20px;
-    transform: translateY(-50%);
-    stroke: red;
-  }
-`;
-export const Input = styled.input`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  outline: none;
-  border: none;
-  border: 1px solid #6c62e2;
-  padding: 0 15px 0 40px;
-  color: #444;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 6px;
-  transition: all 0.4s ease;
-
-  &:hover {
-    border: 1px solid rgba(141, 78, 245, 0.8);
-  }
-  &:focus {
-    border: 1px solid rgba(141, 78, 245, 0.8);
-    box-shadow: 0px 2px 10px -1px rgba(141, 78, 245, 0.3);
-  }
-`;
-
 export const NavList = styled.ul`
   display: flex;
   align-items: center;
@@ -138,13 +89,14 @@ export const NavMenu = styled.ul`
 
   ${DropdownList} {
     position: absolute;
-    top: 48px;
+    top: 42px;
     opacity: 0;
     visibility: hidden;
     transition: 0.5s;
-    background: rgb(26, 35, 43);
+    background: ${({ theme }) => theme.form_background};
+
     padding: 22px 20px 22px 25px;
-    width: 270px;
+    width: fit-content;
     border-radius: 6px;
     z-index: 1;
   }
@@ -161,7 +113,7 @@ export const NavItem = styled.li`
   &:hover > ${DropdownList} {
     opacity: 1;
     visibility: visible;
-    box-shadow: -11px 6px 26px -14px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 1px 4px hsla(0, 4%, 15%, 0.1);
   }
 `;
 
@@ -183,27 +135,63 @@ export const NavbarClose = styled.div`
 export const DropdownLinkItem = styled(Link)`
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #ffffff;
+  text-transform: capitalize;
+  color: ${({ theme }) => theme.color_white};
   display: flex;
   align-items: center;
   transition: 0.5s;
+
+  &:hover {
+    color: #6c62e2;
+  }
+`;
+
+export const UserImage = styled.img`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+export const LogoutButton = styled.button`
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  color: ${({ theme }) => theme.color_white};
+  display: flex;
+  align-items: center;
+  transition: 0.5s;
+  background: transparent;
+
+  cursor: pointer;
+  &:hover {
+    color: #6c62e2;
+  }
 `;
 
 export const DorpdownItem = styled.li`
   &:not(:last-child) {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   &:hover ${DropdownLinkItem} {
     padding-left: 3px;
   }
+  &:hover ${LogoutButton} {
+    padding-left: 3px;
+  }
 `;
 
 export const NavLinks = styled(Link)`
-  font-weight: 700;
+  font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.5px;
   color: ${({ theme }) => theme.color_white};

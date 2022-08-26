@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   TopContent,
@@ -8,12 +8,14 @@ import {
   Input,
   InputGroup,
   ForgotText,
-  SmsText,
   Button,
 } from "./styles";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Container>
       <Wrapper>
@@ -34,7 +36,6 @@ const Login = () => {
 
         <ForgotText>
           <Link to="/">Forgot your password?</Link>
-          <SmsText>Sign in with Sms?</SmsText>
         </ForgotText>
 
         <InputGroup>

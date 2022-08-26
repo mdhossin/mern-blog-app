@@ -8,24 +8,26 @@ import {
   DropdownList,
   DorpdownItem,
   DropdownLinkItem,
-  InputWrapper,
-  Input,
   Wrapper,
   OpenMenuWrapper,
   ThemeWrapper,
   Backdrop,
   NavbarClose,
+  UserImage,
+  LogoutButton,
 } from "./styles";
-import { AiOutlineSearch } from "react-icons/ai";
+
 import ThemeSwitcher from "../ToggleSwitcher";
 import { useState } from "react";
 import { HiX } from "react-icons/hi";
 import { CgMenuLeft } from "react-icons/cg";
 import { useSelector } from "react-redux";
+import SearchInput from "../SearchInput/inxex";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
+  const user = true;
   return (
     <>
       <Nav>
@@ -78,32 +80,52 @@ const Navbar = () => {
               </svg>
             </NavLogo>
 
-            <InputWrapper>
-              <AiOutlineSearch />
-              <Input type="text" placeholder="Enter your search..." />
-            </InputWrapper>
+            <SearchInput />
 
             <NavMenu className={`mobile-menu ${menuOpen ? "show-menu" : ""}`}>
               <NavItem>
-                <NavLinks to="">Home</NavLinks>
-                <DropdownList>
-                  <DorpdownItem>
-                    <DropdownLinkItem onClick={() => setMenuOpen(false)} to="/">
-                      Home
-                    </DropdownLinkItem>
-                  </DorpdownItem>
-                </DropdownList>
+                <NavLinks to="/">Home</NavLinks>
               </NavItem>
-              <NavItem>
-                <NavLinks onClick={() => setMenuOpen(false)} to="/create-blog">
-                  Create Blog
-                </NavLinks>
-              </NavItem>
-              <NavItem>
-                <NavLinks onClick={() => setMenuOpen(false)} to="/login">
-                  Login / Register
-                </NavLinks>
-              </NavItem>
+              {user && (
+                <NavItem>
+                  <NavLinks
+                    onClick={() => setMenuOpen(false)}
+                    to="/create-blog"
+                  >
+                    Create Blog
+                  </NavLinks>
+                </NavItem>
+              )}
+              {user ? (
+                <NavItem>
+                  {/* <NavLinks to="">Home</NavLinks> */}
+                  <UserImage
+                    src="https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
+                    alt="User"
+                  />
+                  <DropdownList>
+                    <DorpdownItem>
+                      <DropdownLinkItem
+                        onClick={() => setMenuOpen(false)}
+                        to="/"
+                      >
+                        Profile
+                      </DropdownLinkItem>
+                    </DorpdownItem>
+                    <DorpdownItem>
+                      <LogoutButton onClick={() => setMenuOpen(false)}>
+                        Logout
+                      </LogoutButton>
+                    </DorpdownItem>
+                  </DropdownList>
+                </NavItem>
+              ) : (
+                <NavItem>
+                  <NavLinks onClick={() => setMenuOpen(false)} to="/login">
+                    Login / Register
+                  </NavLinks>
+                </NavItem>
+              )}
 
               <NavbarClose
                 theme={theme.darkMode}

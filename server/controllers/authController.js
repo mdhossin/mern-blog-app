@@ -7,9 +7,11 @@ const {
   generateRefreshToken,
 } = require("../config/generateToken");
 const { OAuth2Client } = require("google-auth-library");
-const { validateEmail, validPhone } = require("../utils/validation");
+
 const sendEmail = require("../config/sendMail");
 const jwt = require("jsonwebtoken");
+
+const { validateEmail } = require("../utils/validation");
 
 // const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 // const CLIENT_URL = `${process.env.BASE_URL}`;
@@ -24,10 +26,13 @@ const authController = {
       if (!name) {
         return next(CustomErrorHandler.badRequest("Please add your name"));
       }
-      if (!account) {
+      if (name.length > 20) {
         return next(
-          CustomErrorHandler.badRequest("Please add your email or phone")
+          CustomErrorHandler.badRequest("Your name is up to 20 chars long.")
         );
+      }
+      if (!account) {
+        return next(CustomErrorHandler.badRequest("Please add your email."));
       }
       if (!password) {
         return next(CustomErrorHandler.badRequest("Please add your password."));
@@ -45,9 +50,7 @@ const authController = {
       const user = await User.findOne({ account });
       if (user) {
         return next(
-          CustomErrorHandler.alreadyExist(
-            "Email or Phone number already exists."
-          )
+          CustomErrorHandler.alreadyExist("This Email already exists.")
         );
       }
 
@@ -61,17 +64,13 @@ const authController = {
       const url = `${CLIENT_URL}/active/${active_token}`;
 
       if (!validateEmail(account)) {
-        return next(CustomErrorHandler.badRequest("Please enter valid email"));
+        return next(CustomErrorHandler.badRequest("Please enter valid email."));
       }
 
       if (validateEmail(account)) {
         sendEmail(account, url, "Verify your email address");
         return res.json({ message: "Success! Please check your email." });
       }
-      // else if (validPhone(account)) {
-      //   sendSms(account, url, "Verify your phone number");
-      //   return res.json({ message: "Success! Please check phone." });
-      // }
     } catch (error) {
       return next(error);
     }
@@ -109,9 +108,7 @@ const authController = {
 
       if (!account || !password) {
         return next(
-          CustomErrorHandler.badRequest(
-            "Please enter your email or password or phone."
-          )
+          CustomErrorHandler.badRequest("Please enter your email or password.")
         );
       }
 

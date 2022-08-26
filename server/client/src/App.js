@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { Header } from "./components";
-import { CreateBlog, Home, Login, Register } from "./pages";
+import { CreateBlog, Home, Login, NotFound, Register } from "./pages";
 
 import { GlobalStyle } from "./styles/styles";
 
@@ -20,6 +20,7 @@ const App = () => {
         <Route path="login" element={<Login />} />
         <Route path="sign-up" element={<Register />} />
         <Route path="create-blog" element={<CreateBlog />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </ThemeProvider>
   );

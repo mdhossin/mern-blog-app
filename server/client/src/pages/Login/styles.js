@@ -100,7 +100,7 @@ export const ForgotText = styled.div`
   font-weight: 600;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 1.5rem;
 
   @media (max-width: 576px) {

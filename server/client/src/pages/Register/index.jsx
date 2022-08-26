@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   TopContent,
@@ -12,6 +12,9 @@ import {
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Container>
       <Wrapper>
