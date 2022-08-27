@@ -1,21 +1,72 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useToasts } from "react-toast-notifications";
 import {
-  Container,
   TopContent,
   H2,
-  InputWrapper,
   Wrapper,
   Input,
   InputGroup,
   ForgotText,
   Button,
+  Container,
+  FormWrapper,
 } from "./styles";
-import { Link } from "react-router-dom";
+import { USER_LOGIN_RESET } from "../../redux/constants/userConstants";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/actions/userActions";
 
 const Login = () => {
+  const navigate = useNavigate();
+  let location = useLocation();
+  const dispatch = useDispatch();
+
+  const { addToast } = useToasts();
+  const [user, setUser] = useState({
+    account: "",
+    password: "",
+  });
+  const [typePass, setTypePass] = useState(false);
+
+  const redirect = location.state?.path || "/";
+
+  const userdata = useSelector((state) => state.user);
+
+  const { loading, error, userInfo } = userdata;
+
+  const { account, password } = user;
+  const handleChangeInput = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login(account, password));
+  };
+
+  useEffect(() => {
+    if (error) {
+      dispatch({ type: USER_LOGIN_RESET });
+      addToast(error, { appearance: "error", autoDismiss: true });
+    } else if (userInfo) {
+      if (userInfo.message !== undefined) {
+        addToast(userInfo?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+      }
+      navigate(redirect, { replace: true });
+    }
+  }, [userInfo, error, addToast, navigate, dispatch, redirect]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <Container>
       <Wrapper>
@@ -26,12 +77,30 @@ const Login = () => {
           </span>
         </TopContent>
       </Wrapper>
-      <InputWrapper>
+      <FormWrapper onSubmit={handleSubmit}>
         <InputGroup>
-          <Input type="email" placeholder="Your Email / Phone Number" />
+          <Input
+            id="account"
+            name="account"
+            type="email"
+            placeholder="Your Email*"
+            value={account || ""}
+            onChange={handleChangeInput}
+          />
         </InputGroup>
         <InputGroup>
-          <Input type="password" placeholder="Your Password*" />
+          <Input
+            id="password"
+            name="password"
+            type={typePass ? "text" : "password"}
+            placeholder="Your Password*"
+            value={password || ""}
+            onChange={handleChangeInput}
+          />
+
+          <small onClick={() => setTypePass(!typePass)}>
+            {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+          </small>
         </InputGroup>
 
         <ForgotText>
@@ -39,9 +108,11 @@ const Login = () => {
         </ForgotText>
 
         <InputGroup>
-          <Button>Login</Button>
+          <Button disabled={account && password ? false : true} type="submit">
+            {loading ? "Loading...." : "Login"}
+          </Button>
         </InputGroup>
-      </InputWrapper>
+      </FormWrapper>
     </Container>
   );
 };

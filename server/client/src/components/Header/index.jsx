@@ -27,7 +27,7 @@ import SearchInput from "../SearchInput/inxex";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
-  const user = true;
+  const user = false;
   return (
     <>
       <Nav>
@@ -84,7 +84,9 @@ const Navbar = () => {
 
             <NavMenu className={`mobile-menu ${menuOpen ? "show-menu" : ""}`}>
               <NavItem>
-                <NavLinks to="/">Home</NavLinks>
+                <NavLinks onClick={() => setMenuOpen(false)} to="/">
+                  Home
+                </NavLinks>
               </NavItem>
               {user && (
                 <NavItem>

@@ -149,8 +149,8 @@ export const DropdownLinkItem = styled(Link)`
 `;
 
 export const UserImage = styled.img`
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 
   display: flex;

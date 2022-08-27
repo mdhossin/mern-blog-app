@@ -3,7 +3,7 @@ import {
   Container,
   TopContent,
   H2,
-  InputWrapper,
+  FormWrapper,
   Wrapper,
   Input,
   InputGroup,
@@ -25,7 +25,7 @@ const Register = () => {
           </span>
         </TopContent>
       </Wrapper>
-      <InputWrapper>
+      <FormWrapper>
         <InputGroup>
           <Input type="text" placeholder="Your Name*" />
         </InputGroup>
@@ -42,7 +42,7 @@ const Register = () => {
         <InputGroup>
           <Button>Sign Up</Button>
         </InputGroup>
-      </InputWrapper>
+      </FormWrapper>
     </Container>
   );
 };

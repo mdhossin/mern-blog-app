@@ -48,12 +48,21 @@ export const H2 = styled.h2`
   line-height: 1.44;
   font-weight: 700;
 `;
-export const InputWrapper = styled.form``;
+export const FormWrapper = styled.form``;
 
 export const InputGroup = styled.div`
+  position: relative;
   margin: 0 0 20px;
   width: 100%;
   height: 45px;
+
+  small {
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    color: #444;
+    cursor: pointer;
+  }
 `;
 
 export const Button = styled.button`

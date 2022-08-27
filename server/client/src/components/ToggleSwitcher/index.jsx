@@ -25,6 +25,7 @@ export default function ThemeSwitcher() {
         type="checkbox"
         id="switcher"
         checked={theme.darkMode === "light"}
+        onChange={() => {}}
       />
       <label htmlFor="switcher">
         <div onClick={() => themeChange("dark")} className="icon">
