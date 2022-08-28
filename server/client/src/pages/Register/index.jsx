@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { useToasts } from "react-toast-notifications";
 import {
   Container,
   TopContent,
@@ -10,8 +13,60 @@ import {
   Button,
 } from "../Login/styles";
 import { Link } from "react-router-dom";
+import { register } from "../../redux/actions/userActions";
+import { USER_REGISTER_RESET } from "../../redux/constants/userConstants";
+import { validRegister } from "../../utils/validRegister";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const { addToast } = useToasts();
+
+  const [newUser, setNewUser] = useState({
+    account: "",
+    password: "",
+    name: "",
+    cf_password: "",
+  });
+  const [typePass, setTypePass] = useState(false);
+  const [typeCfPass, setTypeCfPass] = useState(false);
+
+  const userReg = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo: userRegInfo } = userReg;
+
+  const { name, account, password, cf_password } = newUser;
+
+  const handleChangeInput = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const result = validRegister(newUser);
+
+    if (result?.errLength) {
+      return addToast(result?.errMsg[0], {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    }
+
+    dispatch(register(name, account, password));
+  };
+
+  useEffect(() => {
+    if (error) {
+      dispatch({ type: USER_REGISTER_RESET });
+      addToast(error, { appearance: "error", autoDismiss: true });
+    } else if (userRegInfo) {
+      dispatch({ type: USER_REGISTER_RESET });
+      addToast(userRegInfo?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
+    }
+  }, [userRegInfo, error, addToast, dispatch]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -25,22 +80,58 @@ const Register = () => {
           </span>
         </TopContent>
       </Wrapper>
-      <FormWrapper>
+      <FormWrapper onSubmit={handleSubmit}>
         <InputGroup>
-          <Input type="text" placeholder="Your Name*" />
+          <Input
+            name="name"
+            value={name}
+            id="name"
+            onChange={handleChangeInput}
+            placeholder="Your Name"
+            type="text"
+          />
         </InputGroup>
         <InputGroup>
-          <Input type="email" placeholder="Your Email / Phone Number*" />
+          <Input
+            type="email"
+            name="account"
+            value={account}
+            id="email"
+            onChange={handleChangeInput}
+            placeholder="Your Email*"
+          />
         </InputGroup>
         <InputGroup>
-          <Input type="password" placeholder="Your Password*" />
+          <Input
+            id="password"
+            name="password"
+            type={typePass ? "text" : "password"}
+            placeholder="Your Password*"
+            value={password || ""}
+            onChange={handleChangeInput}
+          />
+
+          <small onClick={() => setTypePass(!typePass)}>
+            {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+          </small>
         </InputGroup>
         <InputGroup>
-          <Input type="password" placeholder="Confirm Password*" />
+          <Input
+            id="cf_password"
+            name="cf_password"
+            type={typeCfPass ? "text" : "password"}
+            placeholder="Your Password*"
+            value={cf_password || ""}
+            onChange={handleChangeInput}
+          />
+
+          <small onClick={() => setTypeCfPass(!typeCfPass)}>
+            {typeCfPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+          </small>
         </InputGroup>
 
         <InputGroup>
-          <Button>Sign Up</Button>
+          <Button>{loading ? "Loading..." : "Sign Up"}</Button>
         </InputGroup>
       </FormWrapper>
     </Container>
