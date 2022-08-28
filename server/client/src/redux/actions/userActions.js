@@ -1,4 +1,5 @@
-import { postAPI } from "../../api/api";
+import axios from "axios";
+import { BASE_URL, postAPI } from "../../api/api";
 
 import {
   USER_LOGIN_FAIL,
@@ -61,5 +62,34 @@ export const register = (name, account, password) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+// refresh token action
+
+export const refreshToken = () => async (dispatch) => {
+  const logged = localStorage.getItem("logged");
+  if (logged !== "blogApp") return;
+
+  try {
+    dispatch({
+      type: USER_LOGIN_REQUEST,
+    });
+
+    const { data } = await axios.get(`${BASE_URL}/api/refresh_token`);
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+    localStorage.removeItem("logged");
   }
 };

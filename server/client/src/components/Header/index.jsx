@@ -27,7 +27,7 @@ import SearchInput from "../SearchInput/inxex";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
-  const user = false;
+  const user = useSelector((state) => state.user?.userInfo);
   return (
     <>
       <Nav>
@@ -88,7 +88,7 @@ const Navbar = () => {
                   Home
                 </NavLinks>
               </NavItem>
-              {user && (
+              {user?.user && (
                 <NavItem>
                   <NavLinks
                     onClick={() => setMenuOpen(false)}
@@ -98,13 +98,10 @@ const Navbar = () => {
                   </NavLinks>
                 </NavItem>
               )}
-              {user ? (
+              {user?.user ? (
                 <NavItem>
                   {/* <NavLinks to="">Home</NavLinks> */}
-                  <UserImage
-                    src="https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
-                    alt="User"
-                  />
+                  <UserImage src={user?.user?.avatar} />
                   <DropdownList>
                     <DorpdownItem>
                       <DropdownLinkItem
