@@ -7,6 +7,10 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
   USER_REGISTER_RESET,
+  USER_LOGOUT_REQUEST,
+  USER_LOGOUT_SUCCESS,
+  USER_LOGOUT_FAIL,
+  USER_LOGOUT_RESET,
 } from "../constants/userConstants";
 
 // user login action
@@ -60,6 +64,33 @@ export const userRegisterReducer = (state = {}, action) => {
       };
 
     case USER_REGISTER_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const userLogoutReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_LOGOUT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case USER_LOGOUT_SUCCESS:
+      return {
+        loading: false,
+        userLogout: action.payload,
+      };
+
+    case USER_LOGOUT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case USER_LOGOUT_RESET:
       return {};
 
     default:

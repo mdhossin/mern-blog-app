@@ -1,10 +1,14 @@
 import axios from "axios";
 import { BASE_URL, postAPI } from "../../api/api";
+import { checkTokenExp } from "../../utils/checkTokenExp";
 
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
+  USER_LOGOUT_FAIL,
+  USER_LOGOUT_REQUEST,
+  USER_LOGOUT_SUCCESS,
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -91,5 +95,42 @@ export const refreshToken = () => async (dispatch) => {
           : error.message,
     });
     localStorage.removeItem("logged");
+  }
+};
+
+// user logout action
+export const logout = () => async (dispatch, getState) => {
+  const token = getState().user?.userInfo?.access_token;
+  const result = await checkTokenExp(token, dispatch);
+  const access_token = result ? result : token;
+
+  try {
+    localStorage.removeItem("logged");
+    dispatch({
+      type: USER_LOGOUT_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: access_token,
+      },
+    };
+
+    const { data } = await axios.get(`${BASE_URL}/api/logout`, config);
+
+    dispatch({
+      type: USER_LOGOUT_SUCCESS,
+      payload: data,
+    });
+    window.location.href = "/";
+  } catch (error) {
+    dispatch({
+      type: USER_LOGOUT_FAIL,
+      payload:
+        error.response && error.response.data
+          ? error.response.data
+          : error.message,
+    });
   }
 };

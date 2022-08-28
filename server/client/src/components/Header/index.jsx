@@ -17,17 +17,52 @@ import {
   LogoutButton,
 } from "./styles";
 
+import { Link, useNavigate } from "react-router-dom";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { useToasts } from "react-toast-notifications";
+
 import ThemeSwitcher from "../ToggleSwitcher";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiX } from "react-icons/hi";
 import { CgMenuLeft } from "react-icons/cg";
-import { useSelector } from "react-redux";
+
 import SearchInput from "../SearchInput/inxex";
+import { logout } from "../../redux/actions/userActions";
+import { USER_LOGOUT_RESET } from "../../redux/constants/userConstants";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const { addToast } = useToasts();
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
   const user = useSelector((state) => state.user?.userInfo);
+
+  const logoutUser = useSelector((state) => state.userLogout);
+  const { userLogout, error } = logoutUser;
+
+  const handleLogout = () => {
+    if (!user?.access_token) return;
+    dispatch(logout());
+  };
+
+  useEffect(() => {
+    if (error) {
+      dispatch({ type: USER_LOGOUT_RESET });
+      addToast(error, { appearance: "error", autoDismiss: true });
+    } else if (userLogout) {
+      dispatch({ type: USER_LOGOUT_RESET });
+
+      addToast(userLogout?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
+      navigate("/");
+    }
+  }, [userLogout, error, addToast, dispatch, navigate]);
   return (
     <>
       <Nav>
@@ -112,9 +147,7 @@ const Navbar = () => {
                       </DropdownLinkItem>
                     </DorpdownItem>
                     <DorpdownItem>
-                      <LogoutButton onClick={() => setMenuOpen(false)}>
-                        Logout
-                      </LogoutButton>
+                      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
                     </DorpdownItem>
                   </DropdownList>
                 </NavItem>
