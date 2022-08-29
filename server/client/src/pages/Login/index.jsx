@@ -15,8 +15,8 @@ import {
 } from "./styles";
 import { USER_LOGIN_RESET } from "../../redux/constants/userConstants";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/actions/userActions";
-
+import { googleLogin, login } from "../../redux/actions/userActions";
+import { GoogleLogin } from "@react-oauth/google";
 const Login = () => {
   const navigate = useNavigate();
   let location = useLocation();
@@ -24,7 +24,7 @@ const Login = () => {
 
   const { addToast } = useToasts();
   const [user, setUser] = useState({
-    account: "",
+    email: "",
     password: "",
   });
   const [typePass, setTypePass] = useState(false);
@@ -35,7 +35,7 @@ const Login = () => {
 
   const { loading, error, userInfo } = userdata;
 
-  const { account, password } = user;
+  const { email, password } = user;
   const handleChangeInput = (e) => {
     setUser({
       ...user,
@@ -45,7 +45,16 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(account, password));
+    dispatch(login(email, password));
+  };
+
+  const responseGoogle = async (response) => {
+    console.log(response, "goole response");
+    try {
+      dispatch(googleLogin(response.credential));
+    } catch (error) {
+      alert(error?.message);
+    }
   };
 
   useEffect(() => {
@@ -80,11 +89,11 @@ const Login = () => {
       <FormWrapper onSubmit={handleSubmit}>
         <InputGroup>
           <Input
-            id="account"
-            name="account"
+            id="email"
+            name="email"
             type="email"
             placeholder="Your Email*"
-            value={account || ""}
+            value={email || ""}
             onChange={handleChangeInput}
           />
         </InputGroup>
@@ -108,10 +117,21 @@ const Login = () => {
         </ForgotText>
 
         <InputGroup>
-          <Button disabled={account && password ? false : true} type="submit">
+          <Button disabled={email && password ? false : true} type="submit">
             {loading ? "Loading...." : "Login"}
           </Button>
         </InputGroup>
+
+        <div className="google-button">
+          <p>Or</p>
+          <GoogleLogin
+            width="100%"
+            onSuccess={responseGoogle}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
+        </div>
       </FormWrapper>
     </Container>
   );

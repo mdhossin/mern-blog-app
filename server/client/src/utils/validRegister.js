@@ -1,5 +1,5 @@
 export const validRegister = (user) => {
-  const { name, account, password, cf_password } = user;
+  const { name, email, password, cf_password } = user;
 
   const errors = [];
 
@@ -9,9 +9,9 @@ export const validRegister = (user) => {
     errors.push("Your name is up to 20 charactor long.");
   }
 
-  if (!account?.trim()) {
+  if (!email?.trim()) {
     errors.push("Please add your email.");
-  } else if (!validateEmail(account)) {
+  } else if (!validateEmail(email)) {
     errors.push("Email format is incorrect.");
   }
 

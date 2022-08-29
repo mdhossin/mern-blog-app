@@ -48,7 +48,17 @@ export const H2 = styled.h2`
   line-height: 1.44;
   font-weight: 700;
 `;
-export const FormWrapper = styled.form``;
+export const FormWrapper = styled.form`
+  .google-button {
+    p {
+      color: ${({ theme }) => theme.color_white};
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  }
+`;
 
 export const InputGroup = styled.div`
   position: relative;

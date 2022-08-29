@@ -15,13 +15,13 @@ import {
 } from "../constants/userConstants";
 
 // user login action
-export const login = (account, password) => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({
       type: USER_LOGIN_REQUEST,
     });
 
-    const { data } = await postAPI("login", { account, password });
+    const { data } = await postAPI("login", { email, password });
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -42,7 +42,7 @@ export const login = (account, password) => async (dispatch) => {
 
 // user registration action
 
-export const register = (name, account, password) => async (dispatch) => {
+export const register = (name, email, password) => async (dispatch) => {
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -50,7 +50,7 @@ export const register = (name, account, password) => async (dispatch) => {
 
     const { data } = await postAPI("register", {
       name,
-      account,
+      email,
       password,
     });
 
@@ -130,6 +130,40 @@ export const logout = () => async (dispatch, getState) => {
       payload:
         error.response && error.response.data
           ? error.response.data
+          : error.message,
+    });
+  }
+};
+
+// user google login
+
+export const googleLogin = (id_token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_LOGIN_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: id_token,
+      },
+    };
+
+    const { data } = await axios.post(`${BASE_URL}/api/google_login`, config);
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem("logged", "blogApp");
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
           : error.message,
     });
   }

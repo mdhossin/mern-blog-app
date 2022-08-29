@@ -17,7 +17,7 @@ import {
   LogoutButton,
 } from "./styles";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -40,7 +40,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
   const user = useSelector((state) => state.user?.userInfo);
-
+  console.log(user);
   const logoutUser = useSelector((state) => state.userLogout);
   const { userLogout, error } = logoutUser;
 
@@ -135,8 +135,8 @@ const Navbar = () => {
               )}
               {user?.user ? (
                 <NavItem>
-                  {/* <NavLinks to="">Home</NavLinks> */}
-                  <UserImage src={user?.user?.avatar} />
+                  <UserImage src={user?.user?.avatar} alt="person" />
+
                   <DropdownList>
                     <DorpdownItem>
                       <DropdownLinkItem

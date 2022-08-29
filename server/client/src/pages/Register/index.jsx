@@ -22,7 +22,7 @@ const Register = () => {
   const { addToast } = useToasts();
 
   const [newUser, setNewUser] = useState({
-    account: "",
+    email: "",
     password: "",
     name: "",
     cf_password: "",
@@ -33,7 +33,7 @@ const Register = () => {
   const userReg = useSelector((state) => state.userRegister);
   const { loading, error, userInfo: userRegInfo } = userReg;
 
-  const { name, account, password, cf_password } = newUser;
+  const { name, email, password, cf_password } = newUser;
 
   const handleChangeInput = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -51,7 +51,7 @@ const Register = () => {
       });
     }
 
-    dispatch(register(name, account, password));
+    dispatch(register(name, email, password));
   };
 
   useEffect(() => {
@@ -94,8 +94,8 @@ const Register = () => {
         <InputGroup>
           <Input
             type="email"
-            name="account"
-            value={account}
+            name="email"
+            value={email}
             id="email"
             onChange={handleChangeInput}
             placeholder="Your Email*"

@@ -13,7 +13,7 @@ const jwt = require("jsonwebtoken");
 
 const { validateEmail } = require("../utils/validation");
 
-// const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
+const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 // const CLIENT_URL = `${process.env.BASE_URL}`;
 const CLIENT_URL = `http://localhost:3000`;
 // const CLIENT_URL = `https://mern-quickshop-app-ecommerce.herokuapp.com`;
@@ -21,7 +21,7 @@ const CLIENT_URL = `http://localhost:3000`;
 const authController = {
   async register(req, res, next) {
     try {
-      const { name, account, password } = req.body;
+      const { name, email, password } = req.body;
 
       if (!name) {
         return next(CustomErrorHandler.badRequest("Please add your name"));
@@ -31,7 +31,7 @@ const authController = {
           CustomErrorHandler.badRequest("Your name is up to 20 chars long.")
         );
       }
-      if (!account) {
+      if (!email) {
         return next(CustomErrorHandler.badRequest("Please add your email."));
       }
       if (!password) {
@@ -47,7 +47,7 @@ const authController = {
       }
 
       // here useing the user model
-      const user = await User.findOne({ account });
+      const user = await User.findOne({ email });
       if (user) {
         return next(
           CustomErrorHandler.alreadyExist("This Email already exists.")
@@ -57,18 +57,18 @@ const authController = {
       // hash password
       const passwordHash = await bcrypt.hash(password, 12);
 
-      const newUser = { name, account, password: passwordHash };
+      const newUser = { name, email, password: passwordHash };
 
       const active_token = generateActiveToken({ newUser });
 
       const url = `${CLIENT_URL}/active/${active_token}`;
 
-      if (!validateEmail(account)) {
+      if (!validateEmail(email)) {
         return next(CustomErrorHandler.badRequest("Please enter valid email."));
       }
 
-      if (validateEmail(account)) {
-        sendEmail(account, url, "Verify your email address");
+      if (validateEmail(email)) {
+        sendEmail(email, url, "Verify your email address");
         return res.json({ message: "Success! Please check your email." });
       }
     } catch (error) {
@@ -88,7 +88,7 @@ const authController = {
       if (!newUser)
         return next(CustomErrorHandler.badRequest("Invalid authentication."));
 
-      const user = await User.findOne({ account: newUser.account });
+      const user = await User.findOne({ email: newUser.email });
       if (user)
         return next(CustomErrorHandler.alreadyExist("Account already exists."));
 
@@ -104,15 +104,15 @@ const authController = {
 
   async login(req, res, next) {
     try {
-      const { account, password } = req.body;
+      const { email, password } = req.body;
 
-      if (!account || !password) {
+      if (!email || !password) {
         return next(
           CustomErrorHandler.badRequest("Please enter your email or password.")
         );
       }
 
-      const user = await User.findOne({ account });
+      const user = await User.findOne({ email });
       if (!user)
         return next(
           CustomErrorHandler.badRequest("This account does not exits.")
@@ -185,6 +185,44 @@ const authController = {
       return next(err);
     }
   },
+
+  // google login
+  async googleLogin(req, res, next) {
+    try {
+      const { Authorization } = req.body.headers;
+      const verify = await client.verifyIdToken({
+        idToken: Authorization,
+        audience: `${process.env.MAIL_CLIENT_ID}`,
+      });
+
+      const { email, email_verified, name, picture } = verify.getPayload();
+
+      if (!email_verified)
+        return res.status(500).json({ message: "Email verification failed." });
+
+      const password = email + process.env.GOOGLE_SECRET;
+      const passwordHash = await bcrypt.hash(password, 12);
+
+      const user = await User.findOne({ email });
+
+      console.log(user, "user");
+
+      if (user) {
+        loginUser(user, password, res, next);
+      } else {
+        const user = {
+          name,
+          email,
+          password: passwordHash,
+          avatar: picture,
+          type: "google",
+        };
+        registerUser(user, res);
+      }
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 const loginUser = async (user, password, res, next) => {
@@ -213,6 +251,22 @@ const loginUser = async (user, password, res, next) => {
     message: "Login Success!",
     access_token,
     user: { ...user._doc, password: "" },
+  });
+};
+
+const registerUser = async (user, res) => {
+  const newUser = new User(user);
+
+  const access_token = generateAccessToken({ id: newUser._id });
+  const refresh_token = generateRefreshToken({ id: newUser._id }, res);
+
+  newUser.rf_token = refresh_token;
+  await newUser.save();
+
+  res.json({
+    message: "Login Success!",
+    access_token,
+    user: { ...newUser._doc, password: "" },
   });
 };
 
