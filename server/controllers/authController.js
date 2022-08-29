@@ -251,6 +251,39 @@ const authController = {
       return next(err);
     }
   },
+  // reset password
+  async resetPassword(req, res, next) {
+    if (!req.user)
+      return res.status(400).json({ message: "Invalid Authentication." });
+
+    if (req.user.type !== "register")
+      return res.status(400).json({
+        message: `Quick login account with ${req.user.type} can't use this function.`,
+      });
+    try {
+      const { password } = req.body;
+      if (password < 6) {
+        return next(
+          CustomErrorHandler.badRequest(
+            "Password must be at least 6 charactors long."
+          )
+        );
+      }
+
+      const passwordHash = await bcrypt.hash(password, 12);
+      await User.findOneAndUpdate(
+        {
+          _id: req.user.id,
+        },
+        {
+          password: passwordHash,
+        }
+      );
+      res.json({ message: "Password successfully changed!" });
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 const loginUser = async (user, password, res, next) => {

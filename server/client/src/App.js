@@ -10,6 +10,7 @@ import {
   Login,
   NotFound,
   Register,
+  ResetPassword,
 } from "./pages";
 import { ToastProvider } from "react-toast-notifications";
 import { GlobalStyle } from "./styles/styles";
@@ -58,6 +59,8 @@ const App = () => {
               user?.access_token ? <Navigate to="/" /> : <ForgotPassword />
             }
           />
+
+          <Route path="user/reset/:token" element={<ResetPassword />} />
           <Route path="create-blog" element={<CreateBlog />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
