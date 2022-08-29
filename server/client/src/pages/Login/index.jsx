@@ -31,6 +31,8 @@ const Login = () => {
 
   const redirect = location.state?.path || "/";
 
+  console.log(location.state, "state", redirect);
+
   const userdata = useSelector((state) => state.user);
 
   const { loading, error, userInfo } = userdata;

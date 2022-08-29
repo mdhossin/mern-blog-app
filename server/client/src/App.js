@@ -9,6 +9,8 @@ import {
   Home,
   Login,
   NotFound,
+  PrivateRoute,
+  Profile,
   Register,
   ResetPassword,
 } from "./pages";
@@ -61,7 +63,23 @@ const App = () => {
           />
 
           <Route path="user/reset/:token" element={<ResetPassword />} />
-          <Route path="create-blog" element={<CreateBlog />} />
+          <Route
+            path="create-blog"
+            element={
+              <PrivateRoute>
+                <CreateBlog />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ThemeProvider>

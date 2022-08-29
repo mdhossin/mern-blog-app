@@ -141,7 +141,7 @@ const Navbar = () => {
                     <DorpdownItem>
                       <DropdownLinkItem
                         onClick={() => setMenuOpen(false)}
-                        to="/"
+                        to="/profile"
                       >
                         Profile
                       </DropdownLinkItem>
