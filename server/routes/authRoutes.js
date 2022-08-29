@@ -20,4 +20,8 @@ router.get("/refresh_token", authController.refreshToken);
 // google login route
 router.post("/google_login", authController.googleLogin);
 
+// forgot password route
+
+router.post("/user/forgot_password", authController.forgotPassword);
+
 module.exports = router;

@@ -223,6 +223,34 @@ const authController = {
       return next(err);
     }
   },
+
+  async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user)
+        return res
+          .status(400)
+          .json({ message: "This account does not exist." });
+
+      if (user.type !== "register")
+        return res.status(400).json({
+          message: `Quick login account with ${user.type} can't use this function.`,
+        });
+
+      const access_token = generateAccessToken({ id: user._id });
+
+      const url = `${CLIENT_URL}/user/reset/${access_token}`;
+
+      if (validateEmail(email)) {
+        sendEmail(email, url, "Forgot password?");
+        return res.json({ message: "Success! Please check your email." });
+      }
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 const loginUser = async (user, password, res, next) => {

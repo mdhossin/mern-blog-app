@@ -5,6 +5,7 @@ import { Header } from "./components";
 import {
   ActivationEmail,
   CreateBlog,
+  ForgotPassword,
   Home,
   Login,
   NotFound,
@@ -48,6 +49,13 @@ const App = () => {
             path="active/:active_token"
             element={
               user?.access_token ? <Navigate to="/" /> : <ActivationEmail />
+            }
+          />
+
+          <Route
+            path="forgot-password"
+            element={
+              user?.access_token ? <Navigate to="/" /> : <ForgotPassword />
             }
           />
           <Route path="create-blog" element={<CreateBlog />} />

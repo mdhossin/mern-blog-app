@@ -49,7 +49,6 @@ const Login = () => {
   };
 
   const responseGoogle = async (response) => {
-    console.log(response, "goole response");
     try {
       dispatch(googleLogin(response.credential));
     } catch (error) {
@@ -113,7 +112,7 @@ const Login = () => {
         </InputGroup>
 
         <ForgotText>
-          <Link to="/">Forgot your password?</Link>
+          <Link to="/forgot-password">Forgot your password?</Link>
         </ForgotText>
 
         <InputGroup>
