@@ -63,7 +63,7 @@ const Login = () => {
       dispatch({ type: USER_LOGIN_RESET });
       addToast(error, { appearance: "error", autoDismiss: true });
     } else if (userInfo) {
-      if (userInfo.message !== undefined) {
+      if (userInfo?.message !== undefined) {
         addToast(userInfo?.message, {
           appearance: "success",
           autoDismiss: true,

@@ -9,6 +9,7 @@ export const darkTheme = {
   heading_color: "#ffffff",
   border_color: "rgba(255, 255, 255, 0.2)",
   form_background: "rgb(16,24,38)",
+  disabledInputBg: "rgba(255, 255, 255, 0.85)",
 };
 export const lightTheme = {
   background: "rgba(255, 255, 255, 0.25)",
@@ -20,4 +21,5 @@ export const lightTheme = {
   heading_color: "#6C62E2",
   border_color: "hsla(0, 4%, 15%, 0.1)",
   form_background: "#ffffff",
+  disabledInputBg: "hsla(245, 62%, 82%, 0.268)",
 };

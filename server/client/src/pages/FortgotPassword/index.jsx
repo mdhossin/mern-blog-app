@@ -1,73 +1,36 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useToasts } from "react-toast-notifications";
-import { BASE_URL } from "../../api/api";
-import { isEmail } from "../../utils/validRegister";
+import { forgotPassword } from "../../redux/actions/userActions";
+import { FORGOT_PASSWORD_RESET } from "../../redux/constants/userConstants";
 
 import { Button, Section, Wrapper } from "./styles";
 
 const ForgotPassword = () => {
-  const [data, setData] = useState({
-    email: "",
-    error: "",
-    success: "",
-  });
+  const dispatch = useDispatch();
 
   const { addToast } = useToasts();
-  const { email, error, success } = data;
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const forgotData = useSelector((state) => state.forgot);
+  const { error, loading, forgotPassword: forgotSuccess } = forgotData;
 
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value, error: "", success: "" });
-  };
-
-  const forgotPassword = async () => {
-    if (!isEmail(email))
-      return setData({ ...data, error: "Invalid emails.", success: "" });
-
-    try {
-      setLoading(true);
-      const res = await axios.post(`${BASE_URL}/api/user/forgot_password`, {
-        email,
-      });
-      setLoading(false);
-      setData({ ...data, error: "", success: res.data.message });
-    } catch (error) {
-      setLoading(false);
-      error.response.data.message &&
-        setData({
-          ...data,
-          error:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message,
-          success: "",
-        });
-    }
+  const forgotPasswordHandler = () => {
+    dispatch(forgotPassword(email));
   };
 
   useEffect(() => {
     if (error) {
+      dispatch({ type: FORGOT_PASSWORD_RESET });
       addToast(error, { appearance: "error", autoDismiss: true });
-      setData({
-        email: "",
-        error: "",
-        success: "",
-      });
-    } else if (success) {
-      addToast(success, {
+    } else if (forgotSuccess?.message) {
+      dispatch({ type: FORGOT_PASSWORD_RESET });
+      addToast(forgotSuccess?.message, {
         appearance: "success",
         autoDismiss: true,
       });
-      setData({
-        email: "",
-        error: "",
-        success: "",
-      });
     }
-  }, [error, success, addToast]);
+  }, [forgotSuccess, error, addToast, dispatch]);
   return (
     <Section>
       <Wrapper>
@@ -79,11 +42,11 @@ const ForgotPassword = () => {
             name="email"
             id="email"
             value={email}
-            onChange={handleChangeInput}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email"
           />
 
-          <Button type="button" onClick={forgotPassword}>
+          <Button type="button" onClick={forgotPasswordHandler}>
             {loading ? "Loading..." : "Verify your email"}
           </Button>
         </form>

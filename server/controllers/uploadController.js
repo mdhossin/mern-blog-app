@@ -11,6 +11,7 @@ cloudinary.config({
 const uploadController = {
   async uploadAvatar(req, res, next) {
     // console.log(process.env.CLOUD_API_KEY);
+    console.log(req.body);
     try {
       const file = req.files.file;
 

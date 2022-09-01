@@ -3,6 +3,9 @@ import { BASE_URL, postAPI } from "../../api/api";
 import { checkTokenExp } from "../../utils/checkTokenExp";
 
 import {
+  FORGOT_PASSWORD_FAIL,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -168,3 +171,58 @@ export const googleLogin = (id_token) => async (dispatch) => {
     });
   }
 };
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+    const { data } = await axios.post(`${BASE_URL}/api/user/forgot_password`, {
+      email,
+    });
+
+    dispatch({
+      type: FORGOT_PASSWORD_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FORGOT_PASSWORD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const resetPasswordAction =
+  (password, confirmPassword, token) => async (dispatch) => {
+    try {
+      dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      };
+
+      const { data } = await axios.post(
+        `${BASE_URL}/api/user/reset`,
+        { password, confirmPassword },
+        config
+      );
+
+      dispatch({
+        type: FORGOT_PASSWORD_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: FORGOT_PASSWORD_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

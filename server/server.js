@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 const morgan = require("morgan");
 const path = require("path");
 const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -21,8 +23,16 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
+
 // routes
 app.use("/api", authRoutes);
+// routes
+app.use("/api", userRoutes);
 
 // upload routes
 app.use("/api", uploadRoutes);

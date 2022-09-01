@@ -4,9 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useToasts } from "react-toast-notifications";
 
-import axios from "axios";
-import { BASE_URL } from "../../api/api";
-import { checkPassword, isLength } from "../../utils/validRegister";
 import {
   TopContent,
   H2,
@@ -18,90 +15,39 @@ import {
   Container,
   FormWrapper,
 } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPasswordAction } from "../../redux/actions/userActions";
+import { FORGOT_PASSWORD_RESET } from "../../redux/constants/userConstants";
 const ResetPassword = () => {
-  const [data, setData] = useState({
-    password: "",
-    cf_password: "",
-    error: "",
-    success: "",
-  });
+  const dispatch = useDispatch();
+
+  const { addToast } = useToasts();
+  const { token } = useParams();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [typePass, setTypePass] = useState(false);
   const [typeCfPass, setTypeCfPass] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const { token } = useParams();
-  const { addToast } = useToasts();
+  const resetData = useSelector((state) => state.reset);
+  const { error, loading, resetPassword } = resetData;
 
-  const { password, cf_password, error, success } = data;
-
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value, error: "", success: "" });
-  };
-
-  const handleResetPass = async () => {
-    if (isLength(password))
-      return setData({
-        ...data,
-        error: "Password must be at least 6 characters.",
-        success: "",
-      });
-
-    if (checkPassword(password, cf_password))
-      return setData({
-        ...data,
-        error: "Password did not match.",
-        success: "",
-      });
-
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        `${BASE_URL}/api/user/reset`,
-        { password },
-        {
-          headers: { Authorization: token },
-        }
-      );
-      setLoading(false);
-
-      setData({ ...data, error: "", success: res.data.message });
-    } catch (error) {
-      setLoading(false);
-      error.response &&
-        setData({
-          ...data,
-          error:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message,
-          success: "",
-        });
-    }
+  const resetPasswordHandler = () => {
+    dispatch(resetPasswordAction(password, confirmPassword, token));
   };
 
   useEffect(() => {
     if (error) {
+      dispatch({ type: FORGOT_PASSWORD_RESET });
       addToast(error, { appearance: "error", autoDismiss: true });
-      setData({
-        password: "",
-        cf_password: "",
-        error: "",
-        success: "",
-      });
-    } else if (success) {
-      addToast(success, {
+    } else if (resetPassword?.message) {
+      dispatch({ type: FORGOT_PASSWORD_RESET });
+      addToast(resetPassword?.message, {
         appearance: "success",
         autoDismiss: true,
       });
-      setData({
-        password: "",
-        cf_password: "",
-        error: "",
-        success: "",
-      });
     }
-  }, [error, success, addToast]);
+  }, [resetPassword, error, addToast, dispatch]);
 
   return (
     <Container>
@@ -114,11 +60,10 @@ const ResetPassword = () => {
         <InputGroup>
           <Input
             id="password"
-            name="password"
             type={typePass ? "text" : "password"}
             placeholder="New Password*"
             value={password || ""}
-            onChange={handleChangeInput}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <small onClick={() => setTypePass(!typePass)}>
@@ -128,11 +73,10 @@ const ResetPassword = () => {
         <InputGroup>
           <Input
             id="cf_password"
-            name="cf_password"
             type={typeCfPass ? "text" : "password"}
             placeholder="Confirm Password*"
-            value={cf_password || ""}
-            onChange={handleChangeInput}
+            value={confirmPassword || ""}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <small onClick={() => setTypeCfPass(!typeCfPass)}>
@@ -147,7 +91,7 @@ const ResetPassword = () => {
           <Button
             disabled={password ? false : true}
             type="button"
-            onClick={handleResetPass}
+            onClick={resetPasswordHandler}
           >
             {loading ? "Loading...." : "Reset Password"}
           </Button>

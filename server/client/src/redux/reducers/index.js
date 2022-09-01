@@ -1,6 +1,9 @@
 import { combineReducers } from "redux";
+
 import { themeReducer } from "./themeReducer";
 import {
+  fortgotPaswordReducer,
+  resetPaswordReducer,
   userLoginReducer,
   userLogoutReducer,
   userRegisterReducer,
@@ -11,4 +14,6 @@ export default combineReducers({
   user: userLoginReducer,
   userRegister: userRegisterReducer,
   userLogout: userLogoutReducer,
+  forgot: fortgotPaswordReducer,
+  reset: resetPaswordReducer,
 });

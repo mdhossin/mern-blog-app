@@ -40,7 +40,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme);
   const user = useSelector((state) => state.user?.userInfo);
-  console.log(user);
+
   const logoutUser = useSelector((state) => state.userLogout);
   const { userLogout, error } = logoutUser;
 
