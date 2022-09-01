@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   Wrapper,
@@ -10,6 +11,7 @@ import {
   Button,
 } from "./styles";
 
+import { RotatingLines } from "react-loader-spinner";
 import {
   AiOutlineCamera,
   AiOutlineEye,
@@ -17,7 +19,6 @@ import {
 } from "react-icons/ai";
 import { useToasts } from "react-toast-notifications";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { BASE_URL } from "../../api/api";
 
 import { isLength, isMatch } from "../../utils/validRegister";
@@ -186,7 +187,15 @@ const Profile = () => {
       <ProfileContent>
         <ImageBox>
           {loading ? (
-            <div>Loading..</div>
+            <div className="loader">
+              <RotatingLines
+                strokeColor="#6C62E2"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="96"
+                visible={true}
+              />
+            </div>
           ) : (
             <img src={avatar ? avatar : user.avatar} alt="logo" />
           )}

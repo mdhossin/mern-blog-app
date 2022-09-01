@@ -98,6 +98,15 @@ export const ImageBox = styled.div`
       opacity: 0;
     }
   }
+
+  .loader {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 export const Lablel = styled.label`
   display: inline-block;
