@@ -100,14 +100,15 @@ export const NavMenu = styled.ul`
     border-radius: 6px;
     z-index: 1;
   }
+
+  .dropdown {
+    margin-right: 4px !important;
+  }
 `;
 
 export const NavItem = styled.li`
   &:not(:last-child) {
     margin-right: 24px;
-  }
-  &:nth-child(3) {
-    margin-right: 0px;
   }
 
   &:hover > ${DropdownList} {

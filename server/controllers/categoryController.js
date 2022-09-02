@@ -16,22 +16,26 @@ const categoryController = {
         return next(CustomErrorHandler.badRequest("Please add category name."));
       }
 
-      const categoryname = await Categories.findOne({ name: req.body.name });
-      if (categoryname) {
-        return next(
-          CustomErrorHandler.alreadyExist("This category already exists.")
-        );
+      try {
+        const categoryname = await Categories.findOne({ name: req.body.name });
+        if (categoryname) {
+          return next(
+            CustomErrorHandler.alreadyExist("This category already exists.")
+          );
+        }
+
+        const name = req.body.name.toLowerCase();
+
+        const newCategory = new Categories({
+          name,
+        });
+
+        await newCategory.save();
+
+        return res.status(200).json({ message: "Category created!" });
+      } catch (error) {
+        return next(error);
       }
-
-      const name = req.body.name.toLowerCase();
-
-      const newCategory = new Categories({
-        name,
-      });
-
-      await newCategory.save();
-
-      return res.status(200).json({ message: "Category created!" });
     } catch (error) {
       return next(error);
     }

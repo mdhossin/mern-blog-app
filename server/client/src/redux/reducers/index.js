@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { categoryReducer, createCategoryReducer } from "./categoryReducer";
 
 import { themeReducer } from "./themeReducer";
 import {
@@ -16,4 +17,6 @@ export default combineReducers({
   userLogout: userLogoutReducer,
   forgot: fortgotPaswordReducer,
   reset: resetPaswordReducer,
+  createCategory: createCategoryReducer,
+  allCategories: categoryReducer,
 });

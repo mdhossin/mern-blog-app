@@ -8,3 +8,4 @@ export { default as CreateBlog } from "./CreateBlog";
 export { default as NotFound } from "./NotFound";
 export { default as Profile } from "./Profile";
 export { default as PrivateRoute } from "./PrivateRoute";
+export { default as Category } from "./Category";

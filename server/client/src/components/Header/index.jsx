@@ -133,8 +133,15 @@ const Navbar = () => {
                   </NavLinks>
                 </NavItem>
               )}
+              {user?.user.role === "admin" && (
+                <NavItem className="category">
+                  <NavLinks onClick={() => setMenuOpen(false)} to="/category">
+                    Category
+                  </NavLinks>
+                </NavItem>
+              )}
               {user?.user ? (
-                <NavItem>
+                <NavItem className="dropdown">
                   <UserImage src={user?.user?.avatar} alt="person" />
 
                   <DropdownList>

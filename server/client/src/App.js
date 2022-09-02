@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { Header } from "./components";
 import {
   ActivationEmail,
+  Category,
   CreateBlog,
   ForgotPassword,
   Home,
@@ -77,6 +78,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="category"
+            element={
+              <PrivateRoute>
+                <Category />
               </PrivateRoute>
             }
           />
