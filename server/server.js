@@ -10,6 +10,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 const app = express();
 
@@ -36,6 +37,9 @@ app.use("/api", userRoutes);
 
 // upload routes
 app.use("/api", uploadRoutes);
+
+// category routes
+app.use("/api", categoryRoutes);
 
 // error handler middleware
 app.use(errorHandler);
