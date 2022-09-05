@@ -7,7 +7,7 @@ export const Nav = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 999;
   transition: 0.4s; /*For animation dark mode*/
   box-shadow: 0 1px 4px hsla(0, 4%, 15%, 0.1);
 `;

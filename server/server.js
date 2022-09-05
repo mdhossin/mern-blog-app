@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const blogRoutes = require("./routes/blogRoutes");
 
 const app = express();
 
@@ -40,6 +41,8 @@ app.use("/api", uploadRoutes);
 
 // category routes
 app.use("/api", categoryRoutes);
+// blog routes
+app.use("/api", blogRoutes);
 
 // error handler middleware
 app.use(errorHandler);

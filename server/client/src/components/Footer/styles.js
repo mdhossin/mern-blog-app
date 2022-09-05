@@ -52,6 +52,11 @@ export const Right = styled.div`
     align-items: center;
     justify-content: center;
     transition: 0.4s;
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     &:hover {
       background: #5048ac;
