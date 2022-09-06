@@ -1,21 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useToasts } from "react-toast-notifications";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { BASE_URL } from "../../api/api";
-import { getAllCategories } from "../../redux/actions/categoryActions";
 import { Input, InputBox, InputGroup, Label, LeftFromBox } from "./styles";
 import { RotatingLines } from "react-loader-spinner";
 const BlogFrom = ({ blog, setBlog }) => {
-  const dispatch = useDispatch();
-
-  const { addToast } = useToasts();
-
   const [loading, setLoading] = useState(false);
 
   const { categories } = useSelector((state) => state.allCategories);
 
-  const { user, access_token } = useSelector((state) => state.user?.userInfo);
+  const { access_token } = useSelector((state) => state.user?.userInfo);
 
   const handleChangeInput = (e) => {
     const { value, name } = e.target;
@@ -76,9 +70,6 @@ const BlogFrom = ({ blog, setBlog }) => {
     }
   };
 
-  useEffect(() => {
-    dispatch(getAllCategories());
-  }, [dispatch]);
   return (
     <LeftFromBox>
       <InputGroup>

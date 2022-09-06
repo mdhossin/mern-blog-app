@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/blog", auth, blogController.createBlog);
 
-// router.get('/home/blogs', blogCtrl.getHomeBlogs)
+router.get("/home/blogs", blogController.getHomeBlogs);
 
 // router.get('/blogs/category/:id', blogCtrl.getBlogsByCategory)
 
