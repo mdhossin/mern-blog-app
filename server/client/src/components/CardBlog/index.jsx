@@ -12,25 +12,24 @@ import {
   Button,
 } from "./styles";
 
-import Img from "../../assets/images/node.webp";
-const CardBlog = () => {
+const CardBlog = ({ blog }) => {
+  console.log(blog);
   return (
     <Card>
       <Link to="blogs/sddf">
-        <CardImg src={Img} />
+        <div className="card-img">
+          <CardImg src={blog.thumbnail} />
+        </div>
       </Link>
       <ContentWrapper>
         <TopContent>
-          <WritenBy>By: Jhon doe</WritenBy>
-          <Publised> 11/22/22, 12:12:18 PM</Publised>
+          <WritenBy>By: {blog.user.name}</WritenBy>
+          <Publised>{new Date(blog.createdAt).toLocaleString()}</Publised>
         </TopContent>
         <Link to="blogs/sddf">
-          <Heading>What is redux?</Heading>
+          <Heading>{blog.title}</Heading>
         </Link>
-        <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero,
-          repellat?
-        </Description>
+        <Description>{blog.description.slice(0, 50) + "..."}</Description>
 
         <Button to="/">Read More</Button>
       </ContentWrapper>

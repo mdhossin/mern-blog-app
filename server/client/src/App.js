@@ -23,6 +23,7 @@ import { darkTheme, lightTheme } from "./utils/Theme";
 import { useEffect } from "react";
 import { refreshToken } from "./redux/actions/userActions";
 import { getAllCategories } from "./redux/actions/categoryActions";
+import { getAllBlogs } from "./redux/actions/blogActions";
 
 const App = () => {
   const theme = useSelector((state) => state.theme);
@@ -32,6 +33,7 @@ const App = () => {
   useEffect(() => {
     dispatch(refreshToken());
     dispatch(getAllCategories());
+    dispatch(getAllBlogs());
   }, [dispatch]);
 
   const user = useSelector((state) => state.user?.userInfo);

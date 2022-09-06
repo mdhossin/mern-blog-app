@@ -15,7 +15,11 @@ export const Container = styled.div`
   }
 `;
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  .category {
+    margin-bottom: 3rem;
+  }
+`;
 export const Heading = styled.h1`
   font-size: 2rem;
   font-weight: 700;
@@ -23,6 +27,8 @@ export const Heading = styled.h1`
   padding-bottom: 0.5rem;
   color: ${({ theme }) => theme.heading_color};
   cursor: pointer;
+  word-break: break-all;
+  text-transform: capitalize;
 
   span {
     font-size: 1rem;
@@ -40,6 +46,6 @@ export const Content = styled.div`
     grid-template-columns: repeat(3, 1fr);
   }
   @media (min-width: 1280px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 `;
