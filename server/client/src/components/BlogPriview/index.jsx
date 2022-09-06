@@ -6,7 +6,7 @@ import { BlogContent, Wrapper } from "./styles";
 const BlogPriview = ({ blog }) => {
   const { user, access_token } = useSelector((state) => state.user?.userInfo);
   const { id } = useParams();
-  console.log(user);
+
   return (
     <Wrapper>
       <div className="img-container">

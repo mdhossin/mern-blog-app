@@ -1,20 +1,15 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+  margin-bottom: 0.5rem;
   h2 {
     margin-bottom: 1.2rem;
     margin-top: 0;
     line-height: 15px;
   }
   .ql-editor {
-    min-height: 384px;
+    min-height: 150px;
     word-break: break-all;
-    @media (max-width: 1024px) {
-      min-height: 360px;
-    }
-    @media (max-width: 768px) {
-      min-height: 150px;
-    }
   }
 
   .ql-container.ql-snow {

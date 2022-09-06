@@ -4,6 +4,8 @@ const CustomErrorHandler = require("../services/CustomErrorHandler");
 const blogController = {
   async createBlog(req, res, next) {
     const { title, content, description, thumbnail, category } = req.body;
+
+    console.log(req.user, "req.user");
     try {
       if (!req.user) {
         return next(CustomErrorHandler.badRequest("Invalid authentication."));
@@ -18,10 +20,9 @@ const blogController = {
           CustomErrorHandler.badRequest("Title is up to 50 characters long.")
         );
       }
-
-      if (content?.trim().length < 2000) {
+      if (!category) {
         return next(
-          CustomErrorHandler.badRequest("Content has at least 2000 characters.")
+          CustomErrorHandler.badRequest("Category cannot be left blank.")
         );
       }
 
@@ -44,10 +45,9 @@ const blogController = {
           CustomErrorHandler.badRequest("Thumbnail cannot be left blank.")
         );
       }
-
-      if (!category) {
+      if (content?.trim().length < 2000) {
         return next(
-          CustomErrorHandler.badRequest("Category cannot be left blank.")
+          CustomErrorHandler.badRequest("Content has at least 2000 characters.")
         );
       }
 
@@ -66,6 +66,7 @@ const blogController = {
         res.status(200).json({
           ...newBlog._doc,
           user: req.user,
+          message: "Blog created!",
         });
       } catch (error) {
         return next(error);

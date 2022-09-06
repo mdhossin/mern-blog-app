@@ -51,6 +51,7 @@ export const PreviewContent = styled.div`
 `;
 
 export const SubmitButton = styled.div`
+  margin-top: 1.5rem;
   button {
     background: #6c62e2;
 

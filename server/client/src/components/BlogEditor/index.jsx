@@ -4,14 +4,15 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useSelector } from "react-redux";
+import { useToasts } from "react-toast-notifications";
 import { BASE_URL } from "../../api/api";
 import { Wrapper } from "./styles";
 
 const BlogEditor = ({ setBody, body, blog, setBlog }) => {
   const quillRef = useRef(null);
   const modules = { toolbar: { container } };
-
-  console.log(body);
+  const { addToast } = useToasts();
+  const { error, message } = blog;
 
   const [loading, setLoading] = useState(false);
   const { access_token } = useSelector((state) => state.user?.userInfo);

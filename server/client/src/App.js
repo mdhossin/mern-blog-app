@@ -14,6 +14,7 @@ import {
   Profile,
   Register,
   ResetPassword,
+  UpdateBlog,
 } from "./pages";
 import { ToastProvider } from "react-toast-notifications";
 import { GlobalStyle } from "./styles/styles";
@@ -24,6 +25,7 @@ import { refreshToken } from "./redux/actions/userActions";
 
 const App = () => {
   const theme = useSelector((state) => state.theme);
+  const { loading } = useSelector((state) => state.refreshToken);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,6 +33,10 @@ const App = () => {
   }, [dispatch]);
 
   const user = useSelector((state) => state.user?.userInfo);
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <ToastProvider placement="top-right">
@@ -69,6 +75,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <CreateBlog />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="update-blog/:id"
+            element={
+              <PrivateRoute>
+                <UpdateBlog />
               </PrivateRoute>
             }
           />
