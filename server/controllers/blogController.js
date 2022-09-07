@@ -1,5 +1,13 @@
 const Blog = require("../models/blogModel");
 const CustomErrorHandler = require("../services/CustomErrorHandler");
+const mongoose = require("mongoose");
+const Pagination = (req) => {
+  let page = Number(req.query.page) * 1 || 1;
+  let limit = Number(req.query.limit) * 1 || 4;
+  let skip = (page - 1) * limit;
+
+  return { page, limit, skip };
+};
 
 const blogController = {
   async createBlog(req, res, next) {
@@ -140,6 +148,75 @@ const blogController = {
       ]);
 
       res.status(200).json(blogs);
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async getBlogsByCategory(req, res, next) {
+    const { limit, skip } = Pagination(req);
+
+    try {
+      const Data = await Blog.aggregate([
+        {
+          $facet: {
+            totalData: [
+              {
+                $match: {
+                  category: mongoose.Types.ObjectId(req.params.id),
+                },
+              },
+              // User
+              {
+                $lookup: {
+                  from: "users",
+                  let: { user_id: "$user" },
+                  pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                    { $project: { password: 0 } },
+                  ],
+                  as: "user",
+                },
+              },
+              // array -> object
+              { $unwind: "$user" },
+              // Sorting
+              { $sort: { createdAt: -1 } },
+              { $skip: skip },
+              { $limit: limit },
+            ],
+
+            totalCount: [
+              {
+                $match: {
+                  category: mongoose.Types.ObjectId(req.params.id),
+                },
+              },
+              { $count: "count" },
+            ],
+          },
+        },
+        {
+          $project: {
+            count: { $arrayElemAt: ["$totalCount.count", 0] },
+            totalData: 1,
+          },
+        },
+      ]);
+
+      const blogs = Data[0].totalData;
+      const count = Data[0].count;
+
+      // Pagination
+      let total = 0;
+
+      if (count % limit === 0) {
+        total = count / limit;
+      } else {
+        total = Math.floor(count / limit) + 1;
+      }
+
+      res.json({ blogs, total });
     } catch (error) {
       return next(error);
     }

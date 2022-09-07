@@ -15,11 +15,7 @@ export const Container = styled.div`
   }
 `;
 
-export const Wrapper = styled.div`
-  .category {
-    margin-bottom: 3rem;
-  }
-`;
+export const Wrapper = styled.div``;
 export const Heading = styled.h1`
   font-size: 2rem;
   font-weight: 700;
@@ -37,15 +33,34 @@ export const Heading = styled.h1`
 export const Content = styled.div`
   padding-top: 1.5rem;
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+`;
 
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (min-width: 968px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(4, 1fr);
+export const ReadMore = styled.div`
+  margin-bottom: 3rem;
+  margin-top: 1.5rem;
+
+  a {
+    background: #6c62e2;
+
+    color: #fff;
+    display: inline-block;
+
+    padding: 0.8rem 2rem;
+
+    font-size: 1rem;
+    text-transform: capitalize;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: 0.4s;
+    overflow: hidden;
+
+    &:hover {
+      background: #5048ac;
+    }
   }
 `;

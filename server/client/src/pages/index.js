@@ -10,3 +10,4 @@ export { default as Profile } from "./Profile";
 export { default as PrivateRoute } from "./PrivateRoute";
 export { default as Category } from "./Category";
 export { default as UpdateBlog } from "./UpdateBlog";
+export { default as Blogs } from "./Blogs";

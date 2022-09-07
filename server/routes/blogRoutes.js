@@ -8,7 +8,7 @@ router.post("/blog", auth, blogController.createBlog);
 
 router.get("/home/blogs", blogController.getHomeBlogs);
 
-// router.get('/blogs/category/:id', blogCtrl.getBlogsByCategory)
+router.get("/blogs/category/:id", blogController.getBlogsByCategory);
 
 // router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
 

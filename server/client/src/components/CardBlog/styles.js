@@ -24,7 +24,7 @@ export const CardImg = styled.img`
 `;
 
 export const ContentWrapper = styled.div`
-  padding: 1rem 1.2rem 1.5rem 1.2rem;
+  padding: 1rem 1.2rem 1rem 1.2rem;
 `;
 
 export const TopContent = styled.div`
