@@ -49,7 +49,7 @@ export const Publised = styled.p`
 `;
 export const Heading = styled.h2`
   margin-bottom: 0.7rem;
-  font-size: 1.5rem;
+  font-size: 1.5rem !important;
   line-height: 1.3;
   transition: all 0.4s ease;
   text-transform: capitalize;

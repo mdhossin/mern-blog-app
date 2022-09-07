@@ -6,6 +6,9 @@ import {
   CREATE_BLOG_REQUEST,
   CREATE_BLOG_RESET,
   CREATE_BLOG_SUCCESS,
+  GET_BLOGS_CATEGORY_ID_FAIL,
+  GET_BLOGS_CATEGORY_ID_LOADING,
+  GET_BLOGS_CATEGORY_ID_SUCCESS,
 } from "../constants/blogConstants";
 
 export const createBlogReducer = (state = {}, action) => {
@@ -54,6 +57,39 @@ export const allBlogsReducer = (state = [], action) => {
         loading: false,
         error: action.payload,
       };
+    default:
+      return state;
+  }
+};
+
+// get all product
+export const blogsCategoryReducer = (state = [], action) => {
+  switch (action.type) {
+    case GET_BLOGS_CATEGORY_ID_LOADING:
+      return {
+        loading: true,
+        ...state,
+      };
+    case GET_BLOGS_CATEGORY_ID_SUCCESS:
+      return {
+        loading: false,
+        blogsByCategory: action.payload,
+
+        //     if (state?.every((item) => item.id !== action.payload.id)) {
+        //   return [...state, action.payload];
+        // } else {
+        //   return state.map((blog) =>
+        //     blog.id === action.payload.id ? action.payload : blog
+        //   );
+        // }
+      };
+
+    case GET_BLOGS_CATEGORY_ID_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
     default:
       return state;
   }

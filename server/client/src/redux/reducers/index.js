@@ -1,5 +1,9 @@
 import { combineReducers } from "redux";
-import { allBlogsReducer, createBlogReducer } from "./blogReducer";
+import {
+  allBlogsReducer,
+  blogsCategoryReducer,
+  createBlogReducer,
+} from "./blogReducer";
 import { categoryReducer, createCategoryReducer } from "./categoryReducer";
 
 import { themeReducer } from "./themeReducer";
@@ -24,4 +28,5 @@ export default combineReducers({
   // blog
   createBlog: createBlogReducer,
   homeBlogs: allBlogsReducer,
+  blogsByCategory: blogsCategoryReducer,
 });

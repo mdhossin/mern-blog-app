@@ -154,6 +154,7 @@ const blogController = {
   },
 
   async getBlogsByCategory(req, res, next) {
+    console.log(req.params.id);
     const { limit, skip } = Pagination(req);
 
     try {
