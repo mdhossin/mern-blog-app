@@ -15,7 +15,7 @@ import {
 const CardBlog = ({ blog }) => {
   return (
     <Card>
-      <Link to="/blogs/sddf">
+      <Link to={`/blog/${blog._id}`}>
         <div className="card-img">
           <CardImg src={blog.thumbnail} />
         </div>
@@ -27,12 +27,12 @@ const CardBlog = ({ blog }) => {
           </WritenBy>
           <Publised>{new Date(blog.createdAt).toLocaleString()}</Publised>
         </TopContent>
-        <Link to="/blogs/sddf">
+        <Link to={`/blog/${blog._id}`}>
           <Heading>{blog.title}</Heading>
         </Link>
         <Description>{blog.description.slice(0, 50) + "..."}</Description>
 
-        <Button to="/">Read More</Button>
+        <Button to={`/blog/${blog._id}`}>Read More</Button>
       </ContentWrapper>
     </Card>
   );

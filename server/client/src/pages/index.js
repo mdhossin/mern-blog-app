@@ -12,3 +12,4 @@ export { default as Category } from "./Category";
 export { default as UpdateBlog } from "./UpdateBlog";
 export { default as Blogs } from "./Blogs";
 export { default as OtherUserInfo } from "./OtherUserInfo";
+export { default as Blog } from "./Blog";

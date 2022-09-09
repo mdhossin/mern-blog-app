@@ -290,6 +290,22 @@ const blogController = {
       return mext(error);
     }
   },
+  async getBlog(req, res, next) {
+    try {
+      const blog = await Blog.findOne({ _id: req.params.id }).populate(
+        "user",
+        "-password"
+      );
+
+      if (!blog) {
+        return next(CustomErrorHandler.badRequest("Blog does not exist."));
+      }
+
+      return res.status(200).json(blog);
+    } catch (error) {
+      return next(error);
+    }
+  },
 };
 
 module.exports = blogController;
