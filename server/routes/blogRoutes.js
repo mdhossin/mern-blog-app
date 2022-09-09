@@ -10,7 +10,7 @@ router.get("/home/blogs", blogController.getHomeBlogs);
 
 router.get("/blogs/category/:id", blogController.getBlogsByCategory);
 
-// router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
+router.get("/blogs/user/:id", blogController.getBlogsByUser);
 
 // router.route('/blog/:id')
 //   .get(blogCtrl.getBlog)

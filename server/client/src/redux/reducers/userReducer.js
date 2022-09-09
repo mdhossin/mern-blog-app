@@ -15,6 +15,9 @@ import {
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_RESET,
+  OHTER_USER_REQUEST,
+  OHTER_USER_SUCCESS,
+  OTHER_USER_FAIL,
 } from "../constants/userConstants";
 
 // user login action
@@ -148,6 +151,30 @@ export const resetPaswordReducer = (state = {}, action) => {
       };
     case FORGOT_PASSWORD_RESET:
       return {};
+
+    default:
+      return state;
+  }
+};
+
+export const otherInfoUserReducer = (state = {}, action) => {
+  switch (action.type) {
+    case OHTER_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case OHTER_USER_SUCCESS:
+      return {
+        loading: false,
+        otherInfo: action.payload,
+      };
+    case OTHER_USER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
 
     default:
       return state;

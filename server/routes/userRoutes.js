@@ -9,4 +9,7 @@ router.post("/user/reset", auth, userController.resetPassword);
 // update user
 router.put("/user/update", auth, userController.updateUser);
 
+// get single user
+router.get("/user/:id", userController.getUser);
+
 module.exports = router;

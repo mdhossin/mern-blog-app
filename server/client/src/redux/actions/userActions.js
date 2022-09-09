@@ -6,6 +6,9 @@ import {
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  OHTER_USER_REQUEST,
+  OHTER_USER_SUCCESS,
+  OTHER_USER_FAIL,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -226,3 +229,30 @@ export const resetPasswordAction =
       });
     }
   };
+
+export const getOtherUserInfo = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: OHTER_USER_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.get(`${BASE_URL}/api/user/${id}`, config);
+
+    dispatch({
+      type: OHTER_USER_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: OTHER_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

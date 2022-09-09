@@ -8,6 +8,8 @@ import {
   CREATE_BLOG_FAIL,
   CREATE_BLOG_REQUEST,
   CREATE_BLOG_SUCCESS,
+  GET_BLOGS_BY_USER_LOADING,
+  GET_BLOGS_BY_USER_SUCCESS,
   GET_BLOGS_CATEGORY_ID_FAIL,
   GET_BLOGS_CATEGORY_ID_LOADING,
   GET_BLOGS_CATEGORY_ID_SUCCESS,
@@ -60,7 +62,6 @@ export const getAllBlogs = () => async (dispatch) => {
 };
 
 export const getBlogsByCategoryId = (id, search) => async (dispatch) => {
-  console.log(id, search, "get blog action");
   try {
     let limit = 4;
     let value = search ? search : `?page=${1}`;
@@ -73,6 +74,31 @@ export const getBlogsByCategoryId = (id, search) => async (dispatch) => {
 
     dispatch({
       type: GET_BLOGS_CATEGORY_ID_SUCCESS,
+      payload: { ...data, id, search },
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_BLOGS_CATEGORY_ID_FAIL,
+      payload:
+        error?.response && error.response.data?.message
+          ? error.response.data?.message
+          : error?.message,
+    });
+  }
+};
+export const getBlogsByUserId = (id, search) => async (dispatch) => {
+  try {
+    let limit = 6;
+    let value = search ? search : `?page=${1}`;
+
+    dispatch({ type: GET_BLOGS_BY_USER_LOADING });
+
+    const { data } = await axios.get(
+      `${BASE_URL}/api/blogs/user/${id}${value}&limit=${limit}`
+    );
+
+    dispatch({
+      type: GET_BLOGS_BY_USER_SUCCESS,
       payload: { ...data, id, search },
     });
   } catch (error) {

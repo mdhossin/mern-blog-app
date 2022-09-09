@@ -22,7 +22,9 @@ const CardBlog = ({ blog }) => {
       </Link>
       <ContentWrapper>
         <TopContent>
-          <WritenBy>By: {blog.user.name}</WritenBy>
+          <WritenBy>
+            <Link to={`/profile/${blog.user._id}`}>By: {blog.user.name}</Link>
+          </WritenBy>
           <Publised>{new Date(blog.createdAt).toLocaleString()}</Publised>
         </TopContent>
         <Link to="/blogs/sddf">

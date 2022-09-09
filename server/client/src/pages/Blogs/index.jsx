@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Pagination } from "../../components";
 import CardBlog from "../../components/CardBlog";
 import Loading from "../../components/Loading";
@@ -11,7 +11,7 @@ import { Content, Wrapper } from "./styles";
 const Blogs = () => {
   const dispatch = useDispatch();
   const { category: categoryId } = useParams();
-  const navigate = useNavigate();
+
   const location = useLocation();
   const { search } = location;
   const { loading, error, blogsByCategory } = useSelector(
@@ -32,7 +32,7 @@ const Blogs = () => {
     if (!id) return;
 
     dispatch(getBlogsByCategoryId(id, search));
-  }, [id, dispatch, search, navigate, blogsByCategory?.blogsByCategory]);
+  }, [id, dispatch, search]);
 
   const handlePagination = (num) => {
     const search = `?page=${num}`;

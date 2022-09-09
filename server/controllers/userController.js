@@ -13,7 +13,6 @@ const userController = {
         message: `Quick login account with ${req.user.type} can't use this function.`,
       });
     try {
-      console.log(req.body);
       const { password, confirmPassword } = req.body;
 
       if (password < 6) {
@@ -58,6 +57,19 @@ const userController = {
       res.json({ message: "Update Success!" });
     } catch (err) {
       return next(err);
+    }
+  },
+
+  async getUser(req, res, next) {
+    try {
+      const user = await User.findById(req.params.id).select("-password");
+
+      if (!user) {
+        return next(CustomErrorHandler.badRequest("User not found"));
+      }
+      res.json(user);
+    } catch (error) {
+      return next(error);
     }
   },
 };

@@ -11,6 +11,7 @@ import {
   Home,
   Login,
   NotFound,
+  OtherUserInfo,
   PrivateRoute,
   Profile,
   Register,
@@ -108,6 +109,7 @@ const App = () => {
               </PrivateRoute>
             }
           />
+          <Route path="/profile/:id" element={<OtherUserInfo />} />
 
           <Route path="blogs/:category" element={<Blogs />} />
           <Route path="*" element={<NotFound />} />

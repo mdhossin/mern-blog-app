@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import {
   allBlogsReducer,
+  blogsByUserReducer,
   blogsCategoryReducer,
   createBlogReducer,
 } from "./blogReducer";
@@ -9,6 +10,7 @@ import { categoryReducer, createCategoryReducer } from "./categoryReducer";
 import { themeReducer } from "./themeReducer";
 import {
   fortgotPaswordReducer,
+  otherInfoUserReducer,
   resetPaswordReducer,
   userLoginReducer,
   userLogoutReducer,
@@ -29,4 +31,7 @@ export default combineReducers({
   createBlog: createBlogReducer,
   homeBlogs: allBlogsReducer,
   blogsByCategory: blogsCategoryReducer,
+  // other info user
+  otherInfo: otherInfoUserReducer,
+  blogsByUser: blogsByUserReducer,
 });
