@@ -335,6 +335,29 @@ const blogController = {
       return next(error);
     }
   },
+
+  async deleteBlog(req, res, next) {
+    if (!req.user)
+      return next(CustomErrorHandler.badRequest("Invalid Authentication."));
+
+    try {
+      // Delete Blog
+      const blog = await Blog.findOneAndDelete({
+        _id: req.params.id,
+        user: req.user._id,
+      });
+
+      if (!blog)
+        return next(CustomErrorHandler.badRequest("Invalid Authentication."));
+
+      // Delete Comments
+      // await Comments.deleteMany({ blog_id: blog._id })
+
+      res.status(200).json({ message: "Delete Success!" });
+    } catch (error) {
+      return next(error);
+    }
+  },
 };
 
 module.exports = blogController;

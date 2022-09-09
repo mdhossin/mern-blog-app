@@ -6,6 +6,10 @@ import {
   CREATE_BLOG_REQUEST,
   CREATE_BLOG_RESET,
   CREATE_BLOG_SUCCESS,
+  DELETE_BLOG_FAIL,
+  DELETE_BLOG_REQUEST,
+  DELETE_BLOG_RESET,
+  DELETE_BLOG_SUCCESS,
   GET_BLOGS_BY_USER_FAIL,
   GET_BLOGS_BY_USER_LOADING,
   GET_BLOGS_BY_USER_SUCCESS,
@@ -153,6 +157,33 @@ export const updateBlogReducer = (state = {}, action) => {
         error: action.payload,
       };
     case UPDATE_BLOG_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const deleteBlogReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_BLOG_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case DELETE_BLOG_SUCCESS:
+      return {
+        loading: false,
+        deleteBlog: action.payload,
+      };
+
+    case DELETE_BLOG_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case DELETE_BLOG_RESET:
       return {};
 
     default:

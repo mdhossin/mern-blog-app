@@ -32,11 +32,12 @@ import { BASE_URL } from "../../api/api";
 import { isLength, isMatch } from "../../utils/validRegister";
 
 import { Link, useLocation } from "react-router-dom";
-import { getBlogsByUserId } from "../../redux/actions/blogActions";
-import { Pagination } from "../../components";
+import { deleteBlog, getBlogsByUserId } from "../../redux/actions/blogActions";
+import { Footer, Pagination } from "../../components";
 import Loading from "../../components/Loading";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { DELETE_BLOG_RESET } from "../../redux/constants/blogConstants";
 
 const Profile = () => {
   const [typePass, setTypePass] = useState(false);
@@ -55,6 +56,9 @@ const Profile = () => {
   const [avatar, setAvatar] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, access_token } = useSelector((state) => state.user?.userInfo);
+  const { deleteBlog: deleteBlogData, error: deleteBlogError } = useSelector(
+    (state) => state.deleteBlog
+  );
 
   const { name, password, confirmPassword, error, success } = data;
 
@@ -187,7 +191,7 @@ const Profile = () => {
     if (!user._id) return;
 
     dispatch(getBlogsByUserId(user._id, search));
-  }, [user._id, dispatch, search]);
+  }, [user._id, dispatch, search, deleteBlogData?.message]);
 
   const handlePagination = (num) => {
     const search = `?page=${num}`;
@@ -199,9 +203,19 @@ const Profile = () => {
     if (password) updatePassword();
   };
 
+  const handleDelete = (id) => {
+    if (window.confirm("Do you want to delete this post?")) {
+      dispatch(deleteBlog(id, access_token));
+    }
+  };
+
   useEffect(() => {
-    if (error) {
-      addToast(error, { appearance: "error", autoDismiss: true });
+    if (error || deleteBlogError) {
+      dispatch({ type: DELETE_BLOG_RESET });
+      addToast(error || deleteBlogError, {
+        appearance: "error",
+        autoDismiss: true,
+      });
       setData({
         name: "",
         password: "",
@@ -209,161 +223,175 @@ const Profile = () => {
         error: "",
         success: "",
       });
-    } else if (success) {
-      addToast(success, {
+    } else if (success || deleteBlogData?.message) {
+      dispatch({ type: DELETE_BLOG_RESET });
+      addToast(success || deleteBlogData?.message, {
         appearance: "success",
         autoDismiss: true,
       });
     }
-  }, [error, success, addToast]);
+  }, [
+    error,
+    success,
+    addToast,
+    deleteBlogData?.message,
+    dispatch,
+    deleteBlogError,
+  ]);
 
   return (
-    <Wrapper>
-      <BlogContainer>
-        <ProfileContent>
-          <ImageBox>
-            {loading ? (
-              <div className="loader">
-                <RotatingLines
-                  strokeColor="#6C62E2"
-                  strokeWidth="5"
-                  animationDuration="0.75"
-                  width="96"
-                  visible={true}
+    <>
+      <Wrapper>
+        <BlogContainer>
+          <ProfileContent>
+            <ImageBox>
+              {loading ? (
+                <div className="loader">
+                  <RotatingLines
+                    strokeColor="#6C62E2"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="96"
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                <img src={avatar ? avatar : user.avatar} alt="logo" />
+              )}
+              <span>
+                <AiOutlineCamera />
+                <p>Change</p>
+                <input
+                  type="file"
+                  name="file"
+                  id="file_up"
+                  onChange={changeAvatar}
                 />
-              </div>
-            ) : (
-              <img src={avatar ? avatar : user.avatar} alt="logo" />
-            )}
-            <span>
-              <AiOutlineCamera />
-              <p>Change</p>
-              <input
-                type="file"
-                name="file"
-                id="file_up"
-                onChange={changeAvatar}
+              </span>
+            </ImageBox>
+            <InputGroup>
+              <Lablel>Name</Lablel>
+              <Input
+                type="text"
+                name="name"
+                id="name"
+                defaultValue={user.name}
+                placeholder="Your name"
+                onChange={handleChange}
               />
-            </span>
-          </ImageBox>
-          <InputGroup>
-            <Lablel>Name</Lablel>
-            <Input
-              type="text"
-              name="name"
-              id="name"
-              defaultValue={user.name}
-              placeholder="Your name"
-              onChange={handleChange}
-            />
-          </InputGroup>
-          <InputGroup>
-            <Lablel>Email</Lablel>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              defaultValue={user.email}
-              placeholder="Your email address"
-              disabled
-            />
-          </InputGroup>
-          {user.type !== "register" && (
-            <p>
-              * Quick login account with {user.type} can't use this function *
-            </p>
-          )}
-
-          <InputGroup>
-            <Lablel>Password</Lablel>
-            <Input
-              type={typePass ? "text" : "password"}
-              name="password"
-              id="password"
-              placeholder="Your password"
-              value={password}
-              onChange={handleChange}
-              disabled={user.type !== "register"}
-            />
-            <small onClick={() => setTypePass(!typePass)}>
-              {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-            </small>
-          </InputGroup>
-          <InputGroup>
-            <Lablel>Confirm Password</Lablel>
-            <Input
-              type={typeCfPass ? "text" : "password"}
-              name="confirmPassword"
-              id="confirmPassword"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={handleChange}
-              disabled={user.type !== "register"}
-            />
-            <small onClick={() => setTypeCfPass(!typeCfPass)}>
-              {typeCfPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-            </small>
-          </InputGroup>
-
-          <Button type="button" disabled={loading} onClick={handleUpdate}>
-            {loading ? "Loading..." : " Update"}
-          </Button>
-        </ProfileContent>
-
-        <BlogContent>
-          <div className="content-box">
-            {blogsLoading ? (
-              <Loading />
-            ) : blogsError ? (
-              <h2>{blogsError}</h2>
-            ) : (
-              <>
-                {blogsByUser?.blogs &&
-                  blogsByUser?.blogs.map((blog) => (
-                    <Card key={blog._id}>
-                      <Link to={`/blog/${blog._id}`}>
-                        <ImgBox>
-                          <BlogImage src={blog.thumbnail} />
-                        </ImgBox>
-                      </Link>
-                      <Content>
-                        <Link to={`/blog/${blog._id}`}>
-                          <Title>{blog.title}</Title>
-                        </Link>
-                        <Descritpion>{blog.description}</Descritpion>
-                        <JoinDate>
-                          Created: {new Date(blog.createdAt).toLocaleString()}
-                        </JoinDate>
-
-                        <div className="update-buttons">
-                          <Link to={`/update_blog/${blog._id}`}>
-                            <button>
-                              <FiEdit /> Edit
-                            </button>
-                          </Link>
-                          <button className="delete">
-                            <RiDeleteBin5Line /> Delete
-                          </button>
-                        </div>
-                      </Content>
-                    </Card>
-                  ))}
-              </>
+            </InputGroup>
+            <InputGroup>
+              <Lablel>Email</Lablel>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                defaultValue={user.email}
+                placeholder="Your email address"
+                disabled
+              />
+            </InputGroup>
+            {user.type !== "register" && (
+              <p>
+                * Quick login account with {user.type} can't use this function *
+              </p>
             )}
-          </div>
 
-          {blogsByUser?.blogs.length === 0 && blogsByUser?.total < 1 && (
-            <h3 style={{ fontSize: "2rem" }}>No Blogs</h3>
-          )}
-          {blogsByUser?.total > 1 && (
-            <Pagination
-              total={blogsByUser?.total}
-              callback={handlePagination}
-            />
-          )}
-        </BlogContent>
-      </BlogContainer>
-    </Wrapper>
+            <InputGroup>
+              <Lablel>Password</Lablel>
+              <Input
+                type={typePass ? "text" : "password"}
+                name="password"
+                id="password"
+                placeholder="Your password"
+                value={password}
+                onChange={handleChange}
+                disabled={user.type !== "register"}
+              />
+              <small onClick={() => setTypePass(!typePass)}>
+                {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+              </small>
+            </InputGroup>
+            <InputGroup>
+              <Lablel>Confirm Password</Lablel>
+              <Input
+                type={typeCfPass ? "text" : "password"}
+                name="confirmPassword"
+                id="confirmPassword"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={handleChange}
+                disabled={user.type !== "register"}
+              />
+              <small onClick={() => setTypeCfPass(!typeCfPass)}>
+                {typeCfPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+              </small>
+            </InputGroup>
+
+            <Button type="button" disabled={loading} onClick={handleUpdate}>
+              {loading ? "Loading..." : " Update"}
+            </Button>
+          </ProfileContent>
+
+          <BlogContent>
+            <div className="content-box">
+              {blogsLoading ? (
+                <Loading />
+              ) : blogsError ? (
+                <h2>{blogsError}</h2>
+              ) : (
+                <>
+                  {blogsByUser?.blogs &&
+                    blogsByUser?.blogs.map((blog) => (
+                      <Card key={blog._id}>
+                        <Link to={`/blog/${blog._id}`}>
+                          <ImgBox>
+                            <BlogImage src={blog.thumbnail} />
+                          </ImgBox>
+                        </Link>
+                        <Content>
+                          <Link to={`/blog/${blog._id}`}>
+                            <Title>{blog.title}</Title>
+                          </Link>
+                          <Descritpion>{blog.description}</Descritpion>
+                          <JoinDate>
+                            Created: {new Date(blog.createdAt).toLocaleString()}
+                          </JoinDate>
+
+                          <div className="update-buttons">
+                            <Link to={`/update_blog/${blog._id}`}>
+                              <button>
+                                <FiEdit /> Edit
+                              </button>
+                            </Link>
+                            <button
+                              className="delete"
+                              onClick={() => handleDelete(blog._id)}
+                            >
+                              <RiDeleteBin5Line /> Delete
+                            </button>
+                          </div>
+                        </Content>
+                      </Card>
+                    ))}
+                </>
+              )}
+            </div>
+
+            {blogsByUser?.blogs.length === 0 && blogsByUser?.total < 1 && (
+              <h3 style={{ fontSize: "2rem" }}>No Blogs</h3>
+            )}
+            {blogsByUser?.total > 1 && (
+              <Pagination
+                total={blogsByUser?.total}
+                callback={handlePagination}
+              />
+            )}
+          </BlogContent>
+        </BlogContainer>
+      </Wrapper>
+      <Footer />
+    </>
   );
 };
 

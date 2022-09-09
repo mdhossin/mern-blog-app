@@ -4,6 +4,7 @@ import {
   blogsByUserReducer,
   blogsCategoryReducer,
   createBlogReducer,
+  deleteBlogReducer,
   updateBlogReducer,
 } from "./blogReducer";
 import { categoryReducer, createCategoryReducer } from "./categoryReducer";
@@ -33,6 +34,7 @@ export default combineReducers({
   updateBlog: updateBlogReducer,
   homeBlogs: allBlogsReducer,
   blogsByCategory: blogsCategoryReducer,
+  deleteBlog: deleteBlogReducer,
   // other info user
   otherInfo: otherInfoUserReducer,
   blogsByUser: blogsByUserReducer,

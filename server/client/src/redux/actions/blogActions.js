@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
+import { checkTokenExp } from "../../utils/checkTokenExp";
 
 import {
   ALL_BLOG_FAIL,
@@ -8,6 +9,9 @@ import {
   CREATE_BLOG_FAIL,
   CREATE_BLOG_REQUEST,
   CREATE_BLOG_SUCCESS,
+  DELETE_BLOG_FAIL,
+  DELETE_BLOG_REQUEST,
+  DELETE_BLOG_SUCCESS,
   GET_BLOGS_BY_USER_LOADING,
   GET_BLOGS_BY_USER_SUCCESS,
   GET_BLOGS_CATEGORY_ID_FAIL,
@@ -136,6 +140,31 @@ export const updateBlog = (blog, token, id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_BLOG_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data?.message
+          : error?.message,
+    });
+  }
+};
+
+export const deleteBlog = (id, token) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_BLOG_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    const { data } = await axios.delete(`${BASE_URL}/api/blog/${id}`, config);
+    dispatch({ type: DELETE_BLOG_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_BLOG_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data?.message
