@@ -86,7 +86,7 @@ const App = () => {
             }
           />
           <Route
-            path="update-blog/:id"
+            path="update_blog/:id"
             element={
               <PrivateRoute>
                 <UpdateBlog />

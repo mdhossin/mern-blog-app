@@ -35,6 +35,8 @@ import { Link, useLocation } from "react-router-dom";
 import { getBlogsByUserId } from "../../redux/actions/blogActions";
 import { Pagination } from "../../components";
 import Loading from "../../components/Loading";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 const Profile = () => {
   const [typePass, setTypePass] = useState(false);
@@ -177,8 +179,6 @@ const Profile = () => {
     error: blogsError,
     loading: blogsLoading,
   } = useSelector((state) => state.blogsByUser);
-
-  console.log(blogsByUser, "blogsByUser");
 
   const location = useLocation();
   const { search } = location;
@@ -334,6 +334,17 @@ const Profile = () => {
                         <JoinDate>
                           Created: {new Date(blog.createdAt).toLocaleString()}
                         </JoinDate>
+
+                        <div className="update-buttons">
+                          <Link to={`/update_blog/${blog._id}`}>
+                            <button>
+                              <FiEdit /> Edit
+                            </button>
+                          </Link>
+                          <button className="delete">
+                            <RiDeleteBin5Line /> Delete
+                          </button>
+                        </div>
                       </Content>
                     </Card>
                   ))}

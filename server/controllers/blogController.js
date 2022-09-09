@@ -153,6 +153,7 @@ const blogController = {
     }
   },
 
+  // get blogs by singel category
   async getBlogsByCategory(req, res, next) {
     console.log(req.params.id);
     const { limit, skip } = Pagination(req);
@@ -223,6 +224,7 @@ const blogController = {
     }
   },
 
+  // get blogs by user
   async getBlogsByUser(req, res, next) {
     const { limit, skip } = Pagination(req);
 
@@ -290,6 +292,8 @@ const blogController = {
       return mext(error);
     }
   },
+
+  // single blog detail
   async getBlog(req, res, next) {
     try {
       const blog = await Blog.findOne({ _id: req.params.id }).populate(
@@ -302,6 +306,31 @@ const blogController = {
       }
 
       return res.status(200).json(blog);
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async updateBlog(req, res, next) {
+    if (!req.user)
+      return next(CustomErrorHandler.badRequest("Invalid Authentication."));
+
+    try {
+      const blog = await Blog.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          user: req.user._id,
+        },
+        req.body,
+        {
+          trim: true,
+        }
+      );
+
+      if (!blog)
+        return next(CustomErrorHandler.badRequest("Invalid Authentication."));
+
+      res.status(200).json({ message: "Update Success!", blog });
     } catch (error) {
       return next(error);
     }

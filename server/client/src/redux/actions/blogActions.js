@@ -13,6 +13,9 @@ import {
   GET_BLOGS_CATEGORY_ID_FAIL,
   GET_BLOGS_CATEGORY_ID_LOADING,
   GET_BLOGS_CATEGORY_ID_SUCCESS,
+  UPDATE_BLOG_FAIL,
+  UPDATE_BLOG_REQUEST,
+  UPDATE_BLOG_SUCCESS,
 } from "../constants/blogConstants";
 
 export const createBlog = (blog, token) => async (dispatch) => {
@@ -106,6 +109,35 @@ export const getBlogsByUserId = (id, search) => async (dispatch) => {
       type: GET_BLOGS_CATEGORY_ID_FAIL,
       payload:
         error?.response && error.response.data?.message
+          ? error.response.data?.message
+          : error?.message,
+    });
+  }
+};
+
+export const updateBlog = (blog, token, id) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_BLOG_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    const { data } = await axios.put(
+      `${BASE_URL}/api/blog/${id}`,
+      blog,
+      config
+    );
+
+    dispatch({ type: UPDATE_BLOG_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_BLOG_FAIL,
+      payload:
+        error.response && error.response.data.message
           ? error.response.data?.message
           : error?.message,
     });

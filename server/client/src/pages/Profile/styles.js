@@ -247,6 +247,46 @@ export const Content = styled.div`
   @media (max-width: 768px) {
     padding: 0 1rem 1rem 1rem;
   }
+
+  .update-buttons {
+    text-align: end;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: red;
+      padding: 0.6rem 2rem;
+
+      text-transform: capitalize;
+      border-radius: 4px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.4s;
+      background: #6c62e2;
+      color: #fff;
+
+      &:hover {
+        background: #5048ac;
+      }
+
+      svg {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+
+    .delete {
+      background: rgb(223, 66, 35);
+
+      &:hover {
+        background: rgb(168, 51, 28);
+      }
+    }
+  }
 `;
 export const Title = styled.h4`
   font-size: 1.5rem;

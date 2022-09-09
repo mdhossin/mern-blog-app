@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import { Pagination } from "../../components";
+import { Footer, Pagination } from "../../components";
 import CardBlog from "../../components/CardBlog";
 import Loading from "../../components/Loading";
 import { getBlogsByCategoryId } from "../../redux/actions/blogActions";
@@ -43,26 +43,29 @@ const Blogs = () => {
     return <Loading />;
   }
   return (
-    <Wrapper>
-      {categoryId && <h2>{categoryId}</h2>}
-      {error ? (
-        <h2>{error}</h2>
-      ) : (
-        <Content>
-          {blogsByCategory?.blogs &&
-            blogsByCategory?.blogs.map((blog) => (
-              <CardBlog key={blog._id} blog={blog} />
-            ))}
-        </Content>
-      )}
+    <>
+      <Wrapper>
+        {categoryId && <h2>{categoryId}</h2>}
+        {error ? (
+          <h2>{error}</h2>
+        ) : (
+          <Content>
+            {blogsByCategory?.blogs &&
+              blogsByCategory?.blogs.map((blog) => (
+                <CardBlog key={blog._id} blog={blog} />
+              ))}
+          </Content>
+        )}
 
-      {blogsByCategory?.total > 1 && (
-        <Pagination
-          total={blogsByCategory?.total}
-          callback={handlePagination}
-        />
-      )}
-    </Wrapper>
+        {blogsByCategory?.total > 1 && (
+          <Pagination
+            total={blogsByCategory?.total}
+            callback={handlePagination}
+          />
+        )}
+      </Wrapper>
+      <Footer />
+    </>
   );
 };
 

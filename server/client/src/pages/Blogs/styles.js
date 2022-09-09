@@ -4,6 +4,7 @@ export const Wrapper = styled.div`
   width: 100%;
   max-width: 1280px;
   margin: 8rem auto;
+  margin-bottom: 4rem;
 
   height: 100%;
   color: ${({ theme }) => theme.color_white};

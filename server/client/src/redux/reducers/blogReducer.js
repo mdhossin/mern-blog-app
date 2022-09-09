@@ -12,6 +12,10 @@ import {
   GET_BLOGS_CATEGORY_ID_FAIL,
   GET_BLOGS_CATEGORY_ID_LOADING,
   GET_BLOGS_CATEGORY_ID_SUCCESS,
+  UPDATE_BLOG_FAIL,
+  UPDATE_BLOG_REQUEST,
+  UPDATE_BLOG_RESET,
+  UPDATE_BLOG_SUCCESS,
 } from "../constants/blogConstants";
 
 export const createBlogReducer = (state = {}, action) => {
@@ -123,6 +127,33 @@ export const blogsByUserReducer = (state = [], action) => {
         loading: false,
         error: action.payload,
       };
+
+    default:
+      return state;
+  }
+};
+
+export const updateBlogReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_BLOG_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_BLOG_SUCCESS:
+      return {
+        loading: false,
+        updateBlog: action.payload,
+      };
+
+    case UPDATE_BLOG_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case UPDATE_BLOG_RESET:
+      return {};
 
     default:
       return state;
