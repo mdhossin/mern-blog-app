@@ -26,7 +26,6 @@ import { Pagination } from "../../components";
 const OtherUserInfo = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  console.log(id);
 
   const { otherInfo, loading, error } = useSelector((state) => state.otherInfo);
   const {

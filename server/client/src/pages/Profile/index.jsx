@@ -9,6 +9,14 @@ import {
   ImageBox,
   Lablel,
   Button,
+  Card,
+  ImgBox,
+  BlogImage,
+  Content,
+  Title,
+  Descritpion,
+  JoinDate,
+  BlogContainer,
 } from "./styles";
 
 import { RotatingLines } from "react-loader-spinner";
@@ -18,15 +26,20 @@ import {
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { useToasts } from "react-toast-notifications";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../../api/api";
 
 import { isLength, isMatch } from "../../utils/validRegister";
 
+import { Link, useLocation } from "react-router-dom";
+import { getBlogsByUserId } from "../../redux/actions/blogActions";
+import { Pagination } from "../../components";
+import Loading from "../../components/Loading";
+
 const Profile = () => {
   const [typePass, setTypePass] = useState(false);
   const [typeCfPass, setTypeCfPass] = useState(false);
-
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     name: "",
     password: "",
@@ -159,6 +172,28 @@ const Profile = () => {
     }
   };
 
+  const {
+    blogsByUser,
+    error: blogsError,
+    loading: blogsLoading,
+  } = useSelector((state) => state.blogsByUser);
+
+  console.log(blogsByUser, "blogsByUser");
+
+  const location = useLocation();
+  const { search } = location;
+
+  useEffect(() => {
+    if (!user._id) return;
+
+    dispatch(getBlogsByUserId(user._id, search));
+  }, [user._id, dispatch, search]);
+
+  const handlePagination = (num) => {
+    const search = `?page=${num}`;
+    dispatch(getBlogsByUserId(user._id, search));
+  };
+
   const handleUpdate = () => {
     if (name || avatar) updateInfor();
     if (password) updatePassword();
@@ -184,101 +219,139 @@ const Profile = () => {
 
   return (
     <Wrapper>
-      <ProfileContent>
-        <ImageBox>
-          {loading ? (
-            <div className="loader">
-              <RotatingLines
-                strokeColor="#6C62E2"
-                strokeWidth="5"
-                animationDuration="0.75"
-                width="96"
-                visible={true}
+      <BlogContainer>
+        <ProfileContent>
+          <ImageBox>
+            {loading ? (
+              <div className="loader">
+                <RotatingLines
+                  strokeColor="#6C62E2"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  width="96"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              <img src={avatar ? avatar : user.avatar} alt="logo" />
+            )}
+            <span>
+              <AiOutlineCamera />
+              <p>Change</p>
+              <input
+                type="file"
+                name="file"
+                id="file_up"
+                onChange={changeAvatar}
               />
-            </div>
-          ) : (
-            <img src={avatar ? avatar : user.avatar} alt="logo" />
-          )}
-          <span>
-            <AiOutlineCamera />
-            <p>Change</p>
-            <input
-              type="file"
-              name="file"
-              id="file_up"
-              onChange={changeAvatar}
+            </span>
+          </ImageBox>
+          <InputGroup>
+            <Lablel>Name</Lablel>
+            <Input
+              type="text"
+              name="name"
+              id="name"
+              defaultValue={user.name}
+              placeholder="Your name"
+              onChange={handleChange}
             />
-          </span>
-        </ImageBox>
-        <InputGroup>
-          <Lablel>Name</Lablel>
-          <Input
-            type="text"
-            name="name"
-            id="name"
-            defaultValue={user.name}
-            placeholder="Your name"
-            onChange={handleChange}
-          />
-        </InputGroup>
-        <InputGroup>
-          <Lablel>Email</Lablel>
-          <Input
-            type="email"
-            name="email"
-            id="email"
-            defaultValue={user.email}
-            placeholder="Your email address"
-            disabled
-          />
-        </InputGroup>
-        {user.type !== "register" && (
-          <p>
-            * Quick login account with {user.type} can't use this function *
-          </p>
-        )}
+          </InputGroup>
+          <InputGroup>
+            <Lablel>Email</Lablel>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              defaultValue={user.email}
+              placeholder="Your email address"
+              disabled
+            />
+          </InputGroup>
+          {user.type !== "register" && (
+            <p>
+              * Quick login account with {user.type} can't use this function *
+            </p>
+          )}
 
-        <InputGroup>
-          <Lablel>Password</Lablel>
-          <Input
-            type={typePass ? "text" : "password"}
-            name="password"
-            id="password"
-            placeholder="Your password"
-            value={password}
-            onChange={handleChange}
-            disabled={user.type !== "register"}
-          />
-          <small onClick={() => setTypePass(!typePass)}>
-            {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-          </small>
-        </InputGroup>
-        <InputGroup>
-          <Lablel>Confirm Password</Lablel>
-          <Input
-            type={typeCfPass ? "text" : "password"}
-            name="confirmPassword"
-            id="confirmPassword"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={handleChange}
-            disabled={user.type !== "register"}
-          />
-          <small onClick={() => setTypeCfPass(!typeCfPass)}>
-            {typeCfPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-          </small>
-        </InputGroup>
+          <InputGroup>
+            <Lablel>Password</Lablel>
+            <Input
+              type={typePass ? "text" : "password"}
+              name="password"
+              id="password"
+              placeholder="Your password"
+              value={password}
+              onChange={handleChange}
+              disabled={user.type !== "register"}
+            />
+            <small onClick={() => setTypePass(!typePass)}>
+              {typePass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+            </small>
+          </InputGroup>
+          <InputGroup>
+            <Lablel>Confirm Password</Lablel>
+            <Input
+              type={typeCfPass ? "text" : "password"}
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={handleChange}
+              disabled={user.type !== "register"}
+            />
+            <small onClick={() => setTypeCfPass(!typeCfPass)}>
+              {typeCfPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+            </small>
+          </InputGroup>
 
-        <Button type="button" disabled={loading} onClick={handleUpdate}>
-          {loading ? "Loading..." : " Update"}
-        </Button>
-      </ProfileContent>
-      <BlogContent>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus,
-        minima pariatur molestias repellat delectus ducimus natus atque
-        deleniti? Quia, quibusdam laboriosam optio exercitationem hic iusto
-        deserunt voluptatum animi inventore praesentium.
-      </BlogContent>
+          <Button type="button" disabled={loading} onClick={handleUpdate}>
+            {loading ? "Loading..." : " Update"}
+          </Button>
+        </ProfileContent>
+
+        <BlogContent>
+          <div className="content-box">
+            {blogsLoading ? (
+              <Loading />
+            ) : blogsError ? (
+              <h2>{blogsError}</h2>
+            ) : (
+              <>
+                {blogsByUser?.blogs &&
+                  blogsByUser?.blogs.map((blog) => (
+                    <Card key={blog._id}>
+                      <Link to={`/blog/${blog._id}`}>
+                        <ImgBox>
+                          <BlogImage src={blog.thumbnail} />
+                        </ImgBox>
+                      </Link>
+                      <Content>
+                        <Link to={`/blog/${blog._id}`}>
+                          <Title>{blog.title}</Title>
+                        </Link>
+                        <Descritpion>{blog.description}</Descritpion>
+                        <JoinDate>
+                          Created: {new Date(blog.createdAt).toLocaleString()}
+                        </JoinDate>
+                      </Content>
+                    </Card>
+                  ))}
+              </>
+            )}
+          </div>
+
+          {blogsByUser?.blogs.length === 0 && blogsByUser?.total < 1 && (
+            <h3 style={{ fontSize: "2rem" }}>No Blogs</h3>
+          )}
+          {blogsByUser?.total > 1 && (
+            <Pagination
+              total={blogsByUser?.total}
+              callback={handlePagination}
+            />
+          )}
+        </BlogContent>
+      </BlogContainer>
     </Wrapper>
   );
 };

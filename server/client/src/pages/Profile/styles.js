@@ -1,19 +1,33 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
-  margin-top: 4.5rem;
-  gap: 3rem;
+  margin: 6rem auto;
+
+  height: 100%;
+  color: ${({ theme }) => theme.color_white};
+
+  @media (max-width: 1279px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+`;
+
+export const BlogContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+  }
 `;
 
 export const ProfileContent = styled.div`
   margin-top: 2rem;
   flex: 1;
+  width: 100%;
   display: grid;
   gap: 1rem;
   background: ${({ theme }) => theme.form_background};
@@ -28,9 +42,6 @@ export const ProfileContent = styled.div`
     color: red;
     font-weight: 700;
   }
-`;
-export const BlogContent = styled.div`
-  flex: 2;
 `;
 
 export const ImageBox = styled.div`
@@ -177,4 +188,89 @@ export const Button = styled.button`
   &:hover {
     background: #5048ac;
   }
+`;
+
+export const BlogContent = styled.div`
+  margin-top: 2rem;
+  flex: 2;
+
+  .content-box {
+    display: grid;
+    gap: 1rem;
+
+    @media (max-width: 1023px) {
+      flex: 2;
+
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+  }
+`;
+
+export const Card = styled.div`
+  display: flex;
+  align-items: flex-start;
+
+  gap: 1.5rem;
+
+  border-radius: 6px;
+  background: ${({ theme }) => theme.card_color};
+
+  @media (min-width: 1023px) {
+    padding: 1rem;
+  }
+
+  @media (max-width: 1023px) {
+    flex-direction: column;
+  }
+`;
+export const ImgBox = styled.div`
+  flex: 1;
+  height: 200px;
+  width: 100%;
+  margin: 0 auto;
+  @media (min-width: 1023px) {
+    width: 280px;
+    height: 200px;
+  }
+`;
+export const BlogImage = styled.img`
+  max-width: 100%;
+  height: 200px;
+  @media (min-width: 1023px) {
+    width: 280px;
+    height: 200px;
+  }
+`;
+export const Content = styled.div`
+  flex: 2;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem 1rem 1rem;
+  }
+`;
+export const Title = styled.h4`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.color_white};
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  transition: 0.3s;
+  word-break: break-all;
+
+  &:hover {
+    color: #6c62e2;
+  }
+`;
+export const Descritpion = styled.p`
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.infoColor};
+  word-break: break-all;
+`;
+export const JoinDate = styled.p`
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.infoColor};
 `;
