@@ -1,6 +1,5 @@
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
-import { checkTokenExp } from "../../utils/checkTokenExp";
 
 import {
   ALL_BLOG_FAIL,

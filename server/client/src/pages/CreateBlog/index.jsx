@@ -21,7 +21,7 @@ import {
 } from "./styles";
 import { BASE_URL } from "../../api/api";
 
-const CreateBlog = ({ id }) => {
+const CreateBlog = ({ id, setCallback }) => {
   const initState = {
     user: "",
     title: "",
@@ -135,6 +135,7 @@ const CreateBlog = ({ id }) => {
         appearance: "success",
         autoDismiss: true,
       });
+      setCallback(true);
     }
   }, [
     error,
@@ -145,6 +146,7 @@ const CreateBlog = ({ id }) => {
     dispatch,
     updateBlogData?.message,
     updateBlogErrror,
+    setCallback,
   ]);
 
   return (

@@ -8,6 +8,7 @@ export const Wrapper = styled.section`
   max-width: 500px;
   margin: 0 auto;
   margin-top: 8rem;
+  margin-bottom: 4rem;
   gap: 3rem;
 
   color: ${({ theme }) => theme.color_white};

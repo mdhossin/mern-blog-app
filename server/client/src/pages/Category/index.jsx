@@ -20,6 +20,7 @@ import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import { CREATE_CATEGORY_RESET } from "../../redux/constants/categoryConstants";
 import Loading from "../../components/Loading";
+import { Footer } from "../../components";
 
 const Category = () => {
   const dispatch = useDispatch();
@@ -106,53 +107,62 @@ const Category = () => {
     }
   }, [addToast, createError, dispatch, createCategoryData?.message, callback]);
   return (
-    <Wrapper>
-      <CategoryContent>
-        <CategoryForm onSubmit={createCategories}>
-          <h2>Create Category</h2>
-          <InputBox>
-            <Input
-              type="text"
-              name="name"
-              value={name}
-              required
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Add category"
-            />
-          </InputBox>
-          <button>
-            {createLoading ? "Loading.." : <>{onEdit ? "Update" : "Create"}</>}
-          </button>
-        </CategoryForm>
+    <>
+      <Wrapper>
+        <CategoryContent>
+          <CategoryForm onSubmit={createCategories}>
+            <h2>Create Category</h2>
+            <InputBox>
+              <Input
+                type="text"
+                name="name"
+                value={name}
+                required
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Add category"
+              />
+            </InputBox>
+            <button>
+              {createLoading ? (
+                "Loading.."
+              ) : (
+                <>{onEdit ? "Update" : "Create"}</>
+              )}
+            </button>
+          </CategoryForm>
 
-        <CategoryList>
-          <h2>Category List</h2>
-          {loading ? (
-            <Loading />
-          ) : error ? (
-            <h2>{error}</h2>
-          ) : (
-            <>
-              {categories?.categories?.map((category) => (
-                <div key={category._id} className="category-box">
-                  <h4>{category.name}</h4>
-                  <div className="icon-group">
-                    <div
-                      onClick={() => editCategory(category._id, category.name)}
-                    >
-                      <FaEdit />
-                    </div>
-                    <div onClick={() => deleteCategory(category._id)}>
-                      <RiDeleteBin5Line />
+          <CategoryList>
+            <h2>Category List</h2>
+            {loading ? (
+              <Loading />
+            ) : error ? (
+              <h2>{error}</h2>
+            ) : (
+              <>
+                {categories?.categories?.map((category) => (
+                  <div key={category._id} className="category-box">
+                    <h4>{category.name}</h4>
+                    <div className="icon-group">
+                      <div
+                        onClick={() =>
+                          editCategory(category._id, category.name)
+                        }
+                      >
+                        <FaEdit />
+                      </div>
+                      <div onClick={() => deleteCategory(category._id)}>
+                        <RiDeleteBin5Line />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
-        </CategoryList>
-      </CategoryContent>
-    </Wrapper>
+                ))}
+              </>
+            )}
+          </CategoryList>
+        </CategoryContent>
+      </Wrapper>
+      <Footer />
+    </>
   );
 };
 

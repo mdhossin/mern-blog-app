@@ -8,6 +8,7 @@ import {
   updateBlogReducer,
 } from "./blogReducer";
 import { categoryReducer, createCategoryReducer } from "./categoryReducer";
+import { allCommentsReducer, createCommentReducer } from "./commentReducer";
 
 import { themeReducer } from "./themeReducer";
 import {
@@ -38,4 +39,8 @@ export default combineReducers({
   // other info user
   otherInfo: otherInfoUserReducer,
   blogsByUser: blogsByUserReducer,
+
+  // COMMERNT
+  createComment: createCommentReducer,
+  comments: allCommentsReducer,
 });

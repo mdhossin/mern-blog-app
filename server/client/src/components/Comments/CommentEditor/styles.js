@@ -1,13 +1,6 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  margin-bottom: 0.5rem;
-  h2 {
-    margin-bottom: 1.2rem;
-    margin-top: 0;
-    line-height: 15px;
-  }
-
   .quill > .ql-container > .ql-editor.ql-blank::before {
     color: ${({ theme }) => theme.color_white};
   }

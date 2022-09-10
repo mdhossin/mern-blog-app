@@ -23,9 +23,11 @@ const CategoryBlogs = () => {
             <>
               {homeblog.count > 0 && (
                 <div className="category" key={homeblog._id.toString() + index}>
-                  <Heading>
-                    {homeblog?.name} <span>({homeblog.count})</span>
-                  </Heading>
+                  <Link to={`/blogs/${homeblog.name}`}>
+                    <Heading>
+                      {homeblog?.name} <span>({homeblog.count})</span>
+                    </Heading>
+                  </Link>
                   <Content>
                     {homeblog.blogs.map((blog) => (
                       <CardBlog blog={blog} />

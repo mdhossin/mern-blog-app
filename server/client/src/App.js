@@ -27,17 +27,19 @@ import { useEffect } from "react";
 import { refreshToken } from "./redux/actions/userActions";
 import { getAllCategories } from "./redux/actions/categoryActions";
 import { getAllBlogs } from "./redux/actions/blogActions";
+import { useState } from "react";
 
 const App = () => {
   const theme = useSelector((state) => state.theme);
   const { loading } = useSelector((state) => state.refreshToken);
   const dispatch = useDispatch();
+  const [callback, setCallback] = useState(false);
 
   useEffect(() => {
     dispatch(refreshToken());
     dispatch(getAllCategories());
     dispatch(getAllBlogs());
-  }, [dispatch]);
+  }, [dispatch, callback]);
 
   const user = useSelector((state) => state.user?.userInfo);
 
@@ -81,7 +83,7 @@ const App = () => {
             path="create-blog"
             element={
               <PrivateRoute>
-                <CreateBlog />
+                <CreateBlog setCallback={setCallback} />
               </PrivateRoute>
             }
           />

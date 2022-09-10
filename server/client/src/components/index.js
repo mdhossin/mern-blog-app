@@ -5,3 +5,5 @@ export { default as Footer } from "./Footer";
 export { default as BlogPriview } from "./BlogPriview";
 export { default as BlogEditor } from "./BlogEditor";
 export { default as Pagination } from "./Pagination";
+export { default as Comments } from "./Comments";
+export { default as InputComment } from "./Comments/InputComment";

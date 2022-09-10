@@ -12,7 +12,7 @@ const uploadRoutes = require("./routes/uploadRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const blogRoutes = require("./routes/blogRoutes");
-
+const commentRoutes = require("./routes/commentRoutes");
 const app = express();
 
 // Database connection
@@ -43,6 +43,9 @@ app.use("/api", uploadRoutes);
 app.use("/api", categoryRoutes);
 // blog routes
 app.use("/api", blogRoutes);
+
+// comment routes
+app.use("/api", commentRoutes);
 
 // error handler middleware
 app.use(errorHandler);

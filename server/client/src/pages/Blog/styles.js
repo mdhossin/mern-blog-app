@@ -3,6 +3,7 @@ export const Wrapper = styled.section`
   width: 100%;
   max-width: 1100px;
   margin: 6rem auto;
+  margin-bottom: 2rem;
   padding: 1.5rem;
   height: 100%;
   color: ${({ theme }) => theme.color_white};
@@ -81,6 +82,38 @@ export const TopContent = styled.div`
 
     span {
       color: #6c62e2;
+    }
+  }
+`;
+
+export const CommentContainer = styled.div`
+  width: 100%;
+  max-width: 1100px;
+  margin: 6rem auto;
+  margin-top: 0;
+
+  height: 100%;
+  color: ${({ theme }) => theme.color_white};
+
+  border-radius: 8px;
+
+  @media (max-width: 1279px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 1399px) {
+    max-width: 1200px;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    a {
+      color: #6c62e2;
+      text-decoration: underline;
     }
   }
 `;
