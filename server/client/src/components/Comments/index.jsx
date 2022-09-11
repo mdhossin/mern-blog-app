@@ -1,10 +1,16 @@
 import React from "react";
-import { CommentContainer } from "./styles";
+import AvatarComment from "./AvatarComment";
+import CommentList from "./CommentList";
+import { CommentContainer, Wrapper } from "./styles";
 
-const Comments = ({ Comment }) => {
+const Comments = ({ comment }) => {
   return (
     <CommentContainer>
-      <h2>Comment</h2>
+      <Wrapper>
+        <AvatarComment user={comment?.user} />
+
+        <CommentList comment={comment} />
+      </Wrapper>
     </CommentContainer>
   );
 };

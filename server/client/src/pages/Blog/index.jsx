@@ -15,8 +15,11 @@ import {
 } from "./styles";
 import Footer from "../../components/Footer";
 import { useSelector, useDispatch } from "react-redux";
-import { Comments, InputComment } from "../../components";
-import { createComment } from "../../redux/actions/commentActions";
+import { Comments, InputComment, Pagination } from "../../components";
+import {
+  createComment,
+  getAllComments,
+} from "../../redux/actions/commentActions";
 
 const Blog = () => {
   const { id } = useParams();
@@ -24,6 +27,9 @@ const Blog = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { comments, loading: commentsLoading } = useSelector(
+    (state) => state.comments
+  );
   const user = useSelector((state) => state.user?.userInfo);
   const dispatch = useDispatch();
 
@@ -35,7 +41,7 @@ const Blog = () => {
     const data = {
       content: body,
       user: user?.user,
-      blog_id: blog.blog_id,
+      blog_id: blog._id,
       blog_user_id: blog.user._id,
       createdAt: new Date().toISOString(),
     };
@@ -43,12 +49,6 @@ const Blog = () => {
     setShowComments([data, ...showComments]);
     dispatch(createComment(data, user.access_token));
   };
-
-  // useEffect(() => {
-  //   setShowComments(comments.data);
-  // }, [comments.data]);
-
-  console.log(blog);
 
   useEffect(() => {
     const getBlog = async () => {
@@ -70,6 +70,23 @@ const Blog = () => {
     getBlog();
   }, [id]);
 
+  useEffect(() => {
+    setShowComments(comments?.comments);
+  }, [comments?.comments]);
+
+  console.log(blog, "blog");
+
+  // const fetchComments = useCallback(async(id: string) => {
+  //   setLoading(true)
+  //   await dispatch(getComments(id))
+  //   setLoading(false)
+  // },[dispatch])
+
+  console.log(comments, "comments");
+
+  useEffect(() => {
+    dispatch(getAllComments(id));
+  }, [dispatch, id]);
   return (
     <>
       <Wrapper>
@@ -112,20 +129,16 @@ const Blog = () => {
             comment.
           </p>
         )}
-        {/* {loading ? (
-        <Loading />
-      ) : (
-        showComments?.map((comment, index) => (
-          <Comments key={index} comment={comment} />
-        ))
-      )} */}
-        {/* {
-        comments.total > 1 &&
-        <Pagination 
-        total={comments.total}
-        callback={handlePagination}
-        />
-      } */}
+        {commentsLoading ? (
+          <Loading />
+        ) : (
+          showComments?.map((comment, index) => (
+            <Comments key={index} comment={comment} />
+          ))
+        )}
+        {/* {comments.total > 1 && (
+          <Pagination total={comments.total} callback={handlePagination} />
+        )} */}
       </CommentContainer>
       <Footer />
     </>

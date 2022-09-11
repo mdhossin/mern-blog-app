@@ -19,3 +19,12 @@ export const CommentContainer = styled.div`
     max-width: 1200px;
   }
 `;
+
+export const Wrapper = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  width: 50%;
+`;

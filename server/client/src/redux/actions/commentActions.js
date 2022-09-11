@@ -38,11 +38,11 @@ export const createComment = (comment, token) => async (dispatch) => {
   }
 };
 
-export const getAllComments = () => async (dispatch) => {
+export const getAllComments = (id) => async (dispatch) => {
   try {
     dispatch({ type: ALL_COMMENT_LOADING });
 
-    const { data } = await axios.get(`${BASE_URL}/api/home/blogs`);
+    const { data } = await axios.get(`${BASE_URL}/api/comments/blog/${id}`);
 
     dispatch({
       type: ALL_COMMENT_SUCCESS,
