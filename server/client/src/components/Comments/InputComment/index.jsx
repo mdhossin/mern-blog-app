@@ -1,10 +1,16 @@
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import CommentEditor from "../CommentEditor";
 import { CommentBox } from "./styles";
 
 const InputComment = ({ callback }) => {
   const [body, setBody] = useState("");
   const divRef = useRef(null);
+
+  const { createComment, loading } = useSelector(
+    (state) => state.createComment
+  );
+  console.log(createComment);
 
   const handleSubmit = () => {
     const div = divRef.current;
@@ -29,7 +35,7 @@ const InputComment = ({ callback }) => {
       />
 
       <button className="submit-button" onClick={handleSubmit}>
-        Submit
+        {loading ? "Loading..." : "Submit"}
       </button>
     </CommentBox>
   );

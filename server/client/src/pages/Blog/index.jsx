@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../api/api";
 import Loading from "../../components/Loading";
@@ -23,6 +23,7 @@ import {
 
 const Blog = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [blog, setBlog] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -76,17 +77,25 @@ const Blog = () => {
 
   console.log(blog, "blog");
 
-  // const fetchComments = useCallback(async(id: string) => {
-  //   setLoading(true)
-  //   await dispatch(getComments(id))
-  //   setLoading(false)
-  // },[dispatch])
+  const fetchComments = useCallback(
+    (id, num = 1) => {
+      dispatch(getAllComments(id, num));
+    },
+    [dispatch]
+  );
 
   console.log(comments, "comments");
 
   useEffect(() => {
-    dispatch(getAllComments(id));
-  }, [dispatch, id]);
+    if (!blog?._id) return;
+    const num = location.search.slice(6) || 1;
+    fetchComments(id, num);
+  }, [fetchComments, blog?._id, location, id]);
+
+  const handlePagination = (num) => {
+    fetchComments(blog?._id, num);
+  };
+
   return (
     <>
       <Wrapper>
@@ -125,8 +134,7 @@ const Blog = () => {
           <InputComment callback={handleComment} />
         ) : (
           <p>
-            Please <Link to={`/login?blog/${blog?._id}`}>login</Link> to submit
-            comment.
+            Please <Link to={`/login`}>login</Link> to submit comment.
           </p>
         )}
         {commentsLoading ? (
@@ -136,9 +144,9 @@ const Blog = () => {
             <Comments key={index} comment={comment} />
           ))
         )}
-        {/* {comments.total > 1 && (
-          <Pagination total={comments.total} callback={handlePagination} />
-        )} */}
+        {comments?.total > 1 && (
+          <Pagination total={comments?.total} callback={handlePagination} />
+        )}
       </CommentContainer>
       <Footer />
     </>

@@ -38,11 +38,14 @@ export const createComment = (comment, token) => async (dispatch) => {
   }
 };
 
-export const getAllComments = (id) => async (dispatch) => {
+export const getAllComments = (id, num) => async (dispatch) => {
+  let limit = 4;
   try {
     dispatch({ type: ALL_COMMENT_LOADING });
 
-    const { data } = await axios.get(`${BASE_URL}/api/comments/blog/${id}`);
+    const { data } = await axios.get(
+      `${BASE_URL}/api/comments/blog/${id}?page=${num}&limit=${limit}`
+    );
 
     dispatch({
       type: ALL_COMMENT_SUCCESS,
