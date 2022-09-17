@@ -134,7 +134,8 @@ const Blog = () => {
           <InputComment callback={handleComment} />
         ) : (
           <p>
-            Please <Link to={`/login`}>login</Link> to submit comment.
+            Please <Link to={`/login?blog/${blog?._id}`}>login</Link> to submit
+            comment.
           </p>
         )}
         {commentsLoading ? (

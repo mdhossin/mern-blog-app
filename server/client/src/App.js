@@ -56,10 +56,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="login"
-            element={user?.access_token ? <Navigate to="/" /> : <Login />}
-          />
+          <Route path="login" element={<Login />} />
           <Route
             path="sign-up"
             element={user?.access_token ? <Navigate to="/" /> : <Register />}

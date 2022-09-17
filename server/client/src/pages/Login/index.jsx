@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useToasts } from "react-toast-notifications";
+// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { FacebookLogin } from "react-facebook-login-lite";
 import {
   TopContent,
   H2,
@@ -15,7 +17,11 @@ import {
 } from "./styles";
 import { USER_LOGIN_RESET } from "../../redux/constants/userConstants";
 import { useDispatch, useSelector } from "react-redux";
-import { googleLogin, login } from "../../redux/actions/userActions";
+import {
+  facebookLogin,
+  googleLogin,
+  login,
+} from "../../redux/actions/userActions";
 import { GoogleLogin } from "@react-oauth/google";
 const Login = () => {
   const navigate = useNavigate();
@@ -29,13 +35,15 @@ const Login = () => {
   });
   const [typePass, setTypePass] = useState(false);
 
-  const redirect = location.state?.path || "/";
+  // const redirect = location.state?.path || "/";
 
-  console.log(location.state, "state", redirect);
+  // console.log(location.state, "state", redirect);
 
   const userdata = useSelector((state) => state.user);
 
   const { loading, error, userInfo } = userdata;
+
+  console.log(userdata, "userdata");
 
   const { email, password } = user;
   const handleChangeInput = (e) => {
@@ -58,6 +66,16 @@ const Login = () => {
     }
   };
 
+  console.log(location, "location");
+
+  useEffect(() => {
+    if (userInfo?.access_token) {
+      console.log(location.search);
+      let url = location.search.replace("?", "/") || "/";
+
+      return navigate(url);
+    }
+  }, [userInfo?.access_token, navigate, location.search]);
   useEffect(() => {
     if (error) {
       dispatch({ type: USER_LOGIN_RESET });
@@ -69,13 +87,18 @@ const Login = () => {
           autoDismiss: true,
         });
       }
-      navigate(redirect, { replace: true });
     }
-  }, [userInfo, error, addToast, navigate, dispatch, redirect]);
+  }, [userInfo, error, addToast, navigate, dispatch]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const responseFacebook = (response) => {
+    const { accessToken, userID } = response.authResponse;
+
+    dispatch(facebookLogin(accessToken, userID));
+  };
 
   return (
     <Container>
@@ -124,7 +147,6 @@ const Login = () => {
         </InputGroup>
 
         <div className="google-button">
-          <p>Or</p>
           <GoogleLogin
             width="100%"
             onSuccess={responseGoogle}
@@ -133,7 +155,23 @@ const Login = () => {
             }}
           />
         </div>
+
+        <div className="facebook_login">
+          <FacebookLogin appId="702774910777934" onSuccess={responseFacebook} />
+        </div>
       </FormWrapper>
+
+      {/* <FacebookLogin
+        appId="1312072336268927"
+        fields="name,email,picture.type(large)"
+        callback={responseFacebook}
+        redirectUri={window.location.href}
+        render={(renderProps) => (
+          <Button onClick={renderProps.onClick}>
+            This is my custom FB button
+          </Button>
+        )}
+      /> */}
     </Container>
   );
 };

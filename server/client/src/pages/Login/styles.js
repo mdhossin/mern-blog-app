@@ -20,6 +20,29 @@ export const Container = styled.div`
   @media (max-width: 360px) {
     max-width: 300px;
   }
+
+  .facebook_login {
+    margin-top: 1rem;
+
+    #fb-login {
+      border: none;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        box-shadow: none;
+      }
+
+      img {
+        border-radius: 50%;
+      }
+      span {
+        display: none;
+      }
+    }
+  }
 `;
 
 export const Wrapper = styled.div``;

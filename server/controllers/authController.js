@@ -1,6 +1,7 @@
 const CustomErrorHandler = require("../services/CustomErrorHandler");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
+const fetch = require("node-fetch");
 const {
   generateActiveToken,
   generateAccessToken,
@@ -253,6 +254,46 @@ const authController = {
       }
     } catch (err) {
       return next(err);
+    }
+  },
+
+  async facebookLogin(req, res, next) {
+    try {
+      const { accessToken, userID } = req.body;
+
+      console.log(accessToken, userID);
+
+      const URL = `
+        https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}
+      `;
+
+      const data = await fetch(URL)
+        .then((res) => res.json())
+        .then((res) => {
+          return res;
+        });
+
+      const { email, name, picture } = data;
+
+      const password = email + "yourfacebooksecrectpassword";
+      const passwordHash = await bcrypt.hash(password, 12);
+
+      const user = await User.findOne({ email });
+
+      if (user) {
+        loginUser(user, password, res, next);
+      } else {
+        const user = {
+          name,
+          email,
+          password: passwordHash,
+          avatar: picture.data.url,
+          type: "facebook",
+        };
+        registerUser(user, res);
+      }
+    } catch (error) {
+      return next(error);
     }
   },
 };
