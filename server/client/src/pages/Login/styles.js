@@ -21,7 +21,7 @@ export const Container = styled.div`
     max-width: 300px;
   }
 
-  .facebook_login {
+  /* .facebook_login {
     margin-top: 1rem;
 
     #fb-login {
@@ -42,7 +42,7 @@ export const Container = styled.div`
         display: none;
       }
     }
-  }
+  } */
 `;
 
 export const Wrapper = styled.div``;

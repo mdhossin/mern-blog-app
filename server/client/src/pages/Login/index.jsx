@@ -23,6 +23,7 @@ import {
   login,
 } from "../../redux/actions/userActions";
 import { GoogleLogin } from "@react-oauth/google";
+import FacebookImg from "../../assets/images/fb-icon.png";
 const Login = () => {
   const navigate = useNavigate();
   let location = useLocation();
@@ -157,7 +158,13 @@ const Login = () => {
         </div>
 
         <div className="facebook_login">
-          <FacebookLogin appId="702774910777934" onSuccess={responseFacebook} />
+          <FacebookLogin
+            appId="702774910777934"
+            onSuccess={responseFacebook}
+            autoLoad={true}
+            imgSrc={FacebookImg}
+            btnText={"Sign in with Facebook"}
+          />
         </div>
       </FormWrapper>
 
